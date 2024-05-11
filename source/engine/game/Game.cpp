@@ -160,5 +160,5 @@ void Game::generateOutput()
 void Game::startScene()
 {
     mScene = new Scene(this);
-    mScene->load();
+    mScene->action();
 }

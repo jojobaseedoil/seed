@@ -46,6 +46,13 @@ void Scene::attach(GameObject *actor)
     mActors.push_back(actor);
 }
 
+/* start new scene */
+void Scene::action()
+{
+    unload(); // keeping the scene cohesive
+    load();
+}
+
 /* specific load/unload scene */
 void Scene::unload()
 {

@@ -23,11 +23,14 @@ public:
     /* attach actor into 'this' scene */
     void attach(GameObject *actor);
 
+    /* start new scene */
+    void action();
+
+private:
     /* specific load/unload scene */
     virtual void unload();
     virtual void load();
 
-private:
     /* 'Scene' params */
     Game *mGame;
 

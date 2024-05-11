@@ -34,11 +34,27 @@ add_executable(
     source/engine/component/Component.cpp
     source/engine/component/Component.h
 
+    # engine.component.collider
+    source/engine/component/collider/ColliderComponent.cpp
+    source/engine/component/collider/ColliderComponent.h
+
+    # engine.component.drawable
+    source/engine/component/drawable/DrawComponent.cpp
+    source/engine/component/drawable/DrawComponent.h
+
+    # engine.component.rigidbody
+    source/engine/component/rigidbody/RigidBodyComponent.cpp
+    source/engine/component/rigidbody/RigidBodyComponent.h
+
     # engine.utils
     source/engine/utils/Math.cpp
     source/engine/utils/Math.h
 
     source/engine/utils/Transform.h
+
+    # engine.utils.builder
+    source/engine/utils/builder/Builder.h
+    source/engine/utils/builder/Director.h
 )
 
 # Link SDL
