@@ -1,70 +1,78 @@
-// #pragma once
+#pragma once
 
-// #include <type_traits>
-// #include <memory>
+#include <type_traits>
+#include <memory>
 
-// template<typename T>
-// class Builder
-// {
-// public:
-//     Builder() : entity(nullptr)
-//     {
+#include "../../entity/GameObject.h"
+#include "../../scene/Scene.h"
 
-//     }
+template<typename T>
+class Builder
+{
+public:
+    Builder(Scene *scene): 
+        entity (nullptr),
+        mScene (scene)
+    {
 
-//     template<typename... Args>
-//     void reset(Args&&... args)
-//     {
-//         entity = std::make_unique<T>(std::forward<Args>(args)...);
-//     }
+    }
 
-//     T *getProduct()
-//     {
-//         return entity.get();
-//     }
+    template<typename... Args>
+    void reset(Args&&... args)
+    {
+        entity = new T(mScene, std::forward<Args>(args)...);
+    }
 
-//     void setPosition(const Vector2 &p)
-//     {
-//         if(entity != nullptr)
-//         {
-//             entity->translate(p);
-//         }
-//     }
+    T *getProduct()
+    {
+        return entity;
+    }
 
-//     void setRotation(const Vector2 &r)
-//     {
-//         if(entity != nullptr)
-//         {
-//             entity->rotate(r);
-//         }
-//     }
+    void setPosition(const Vector2 &p)
+    {
+        if(entity != nullptr)
+        {
+            entity->translate(p);
+        }
+    }
 
-//     void setScale(const Vector2 &s)
-//     {
-//         if(entity != nullptr)
-//         {
-//             entity->scale(s);
-//         }
-//     }
+    void setRotation(const Vector2 &r)
+    {
+        if(entity != nullptr)
+        {
+            entity->rotate(r);
+        }
+    }
 
-//     void setState(const State &state)
-//     {
-//         if(entity != nullptr)
-//         {
-//             entity->setState(state);
-//         }
-//     }
+    void setScale(const Vector2 &s)
+    {
+        if(entity != nullptr)
+        {
+            entity->scale(s);
+        }
+    }
 
-//     void setComponent(Component *c)
-//     {
-//         if(entity != nullptr)
-//         {
-//             entity->plug(c);
-//         }
-//     }
+    void setState(const State &state)
+    {
+        if(entity != nullptr)
+        {
+            entity->setState(state);
+        }
+    }
 
-// private:
-//     std::unique_ptr<T> entity;
+    void setComponents(const std::vector<Component*> &components)
+    {
+        if(entity != nullptr)
+        {
+            for(Component *c : components)
+            {
+                entity->attach(c);
+            }
+        }
+    }
 
-//     static_assert(std::is_base_of<GameObject, T>::value, "T must be a GameObject.");
-// };
+private:
+    T *entity;
+    Scene *mScene;
+    static_assert(std::is_base_of<GameObject, T>::value, "T must be a GameObject.");
+};

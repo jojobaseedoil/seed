@@ -22,7 +22,6 @@ GameObject::~GameObject()
     }
 }
 
-
 /* update game object */
 void GameObject::processInput(const Uint8 *keyboard)
 {
@@ -102,8 +101,8 @@ const State &GameObject::getState() const
     return mState;
 }
 
-/* insert component into 'this' GameObject */
-void GameObject::plug(Component *c)
+/* attach component into 'this' GameObject */
+void GameObject::attach(Component *c)
 {
     mComponents.push_back(c);
 }

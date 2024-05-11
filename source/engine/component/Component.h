@@ -7,7 +7,7 @@ class GameObject;
 class Component
 {
 public:
-    Component(GameObject *owner=nullptr);
+    Component(GameObject *owner);
     virtual ~Component();
 
     /* update component */

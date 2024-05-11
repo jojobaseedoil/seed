@@ -7,6 +7,7 @@ class Game;
 class SDL_Renderer;
 class GameObject;
 class DrawComponent;
+class Director;
 
 class Scene
 {
@@ -19,8 +20,8 @@ public:
     void update(float dt);
     void draw(SDL_Renderer *renderer);
 
-    /* cast actor into 'this' scene */
-    void cast(GameObject *actor);
+    /* attach actor into 'this' scene */
+    void attach(GameObject *actor);
 
     /* specific load/unload scene */
     virtual void unload();
@@ -29,6 +30,8 @@ public:
 private:
     /* 'Scene' params */
     Game *mGame;
+
+    Director *mDirector;
 
     std::vector<GameObject*> mActors;
     std::vector<GameObject*> mPendingActors;

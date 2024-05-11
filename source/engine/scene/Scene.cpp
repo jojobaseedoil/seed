@@ -1,12 +1,12 @@
 #include "Scene.h"
 
-#include "../entity/GameObject.h"
-#include "../component/Component.h"
+#include "../utils/builder/Director.h"
 
 #include <iostream>
 
 Scene::Scene(Game *game):
     mGame       (game),
+    mDirector   (nullptr),
     mIsUpdating (false)
 {
     std::cout << "\tcreate 'Scene'.\n";
@@ -41,7 +41,7 @@ void Scene::draw(SDL_Renderer *renderer)
 }
 
 /* cast actor into 'this' scene */
-void Scene::cast(GameObject *actor)
+void Scene::attach(GameObject *actor)
 {
     mActors.push_back(actor);
 }
@@ -49,6 +49,8 @@ void Scene::cast(GameObject *actor)
 /* specific load/unload scene */
 void Scene::unload()
 {
+    delete mDirector;
+
     for(GameObject *actor : mActors)
     {
         delete actor;
@@ -57,37 +59,9 @@ void Scene::unload()
 
 void Scene::load()
 {
-    /*
-        @test-scene
+    mDirector = new Director(this);
+    Builder<GameObject> builder(this);
 
-        Builder<GameObject> builder(this);
-
-        for(int i=0; i<2; i++)
-        {
-            director.build(&builder);
-            cast(builder.getProduct());
-        }
-    */
-    
-    /* actor mario */
-    GameObject *mario = new GameObject(this);
-    /* mario components */
-    Component *draw = new Component(mario);
-    Component *rigidbody = new Component(mario);
-
-    mario->plug(draw);
-    mario->plug(rigidbody);
-
-    /* actor goomba */
-    GameObject *goomba = new GameObject(this);
-    /* goomba components */
-    Component *drawAnim = new Component(goomba);
-    Component *rigidbody2D = new Component(goomba);
-
-    goomba->plug(drawAnim);
-    goomba->plug(rigidbody2D);
-
-    /* add mario and goomba into the scene */
-    Scene::cast(mario);
-    Scene::cast(goomba);
+    mDirector->build(builder);
+    mDirector->build(builder);
 }

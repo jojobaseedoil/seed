@@ -16,7 +16,7 @@ enum class State
 class GameObject
 {
 public:
-    GameObject(Scene *scene=nullptr);
+    GameObject(Scene *scene);
     virtual ~GameObject();
 
     /* update game object */
@@ -37,8 +37,8 @@ public:
     void setState(const State &state);
     const State &getState() const;
 
-    /* insert component into 'this' GameObject */
-    void plug(Component *c);
+    /* attach component into 'this' GameObject */
+    void attach(Component *c);
 
     /* search for a component of type T */
     template<typename T>
