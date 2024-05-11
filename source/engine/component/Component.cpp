@@ -1,19 +1,19 @@
 #include "Component.h"
 
-#include "../entity/GameObject.h"
+#include <SDL2/SDL_log.h>
 
-#include <iostream>
+#include "../entity/GameObject.h"
 
 Component::Component(GameObject *owner):
     mOwner     (owner),
     mIsEnabled (true)
 {
-    std::cout << "\t\t\tcreate 'Component'.\n";
+    SDL_Log("\t\t\tcreate 'Component'.\n");
 }
 
 Component::~Component()
 {
-    std::cout << "\t\t\tdelete 'Component'.\n";
+    SDL_Log("\t\t\tdelete 'Component'.\n");
 }
 
 /* update component */

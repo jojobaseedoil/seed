@@ -1,20 +1,20 @@
 #include "GameObject.h"
 
-#include "../component/Component.h"
+#include <SDL2/SDL_log.h>
 
-#include <iostream>
+#include "../component/Component.h"
 
 GameObject::GameObject(Scene *scene):
     mScene     (scene),
     mTransform (Transform()),
     mState     (State::Active)
 {
-    std::cout << "\t\tcreate 'GameObject'.\n";
+    SDL_Log("\t\tcreate 'GameObject'.\n");
 }
 
 GameObject::~GameObject()
 {
-    std::cout << "\t\tdelete 'GameObject'.\n";
+    SDL_Log("\t\tdelete 'GameObject'.\n");
 
     for(Component *c : mComponents)
     {
@@ -126,5 +126,5 @@ void GameObject::onProcessInput(const Uint8 *keyboard)
 
 void GameObject::onUpdate(float dt)
 {
-
+    
 }

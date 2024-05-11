@@ -2,8 +2,6 @@
 
 #include "../scene/Scene.h"
 
-#include <iostream>
-
 Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mWindow       (nullptr),
     mRenderer     (nullptr),
@@ -15,12 +13,12 @@ Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mIsRunning    (true),
     mIsPaused     (false)
 {
-    std::cout << "create 'Game'.\n";
+    SDL_Log("create 'Game'");
 }
 
 Game::~Game()
 {
-    std::cout << "delete 'Game'.\n";
+    SDL_Log("create 'Game'");
     delete mScene;
 }
 
@@ -140,7 +138,7 @@ void Game::updateGame()
         mScene->update(dt);
     }
 
-    // SDL_Log("Delta Time : %f", dt);
+    SDL_Log("Delta Time : %f", dt);
 }
 
 void Game::generateOutput()

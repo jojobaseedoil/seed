@@ -4,10 +4,9 @@ RigidBodyComponent::RigidBodyComponent(GameObject *owner, float mass, float fric
     Component     (owner),
     mVelocity     (Vector2::Zero),
     mAcceleration (Vector2::Zero),
-    mFriction     (friction),
-    mMass         (mass)
+    mFriction     (friction)
 {
-
+    mMass = (mass == 0.0f ? 1e-9 : mass);
 }
 
 const Vector2 &RigidBodyComponent::getVelocity() const

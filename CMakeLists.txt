@@ -29,6 +29,9 @@ add_executable(
     # engine.entity
     source/engine/entity/GameObject.cpp
     source/engine/entity/GameObject.h
+
+    source/engine/entity/dummy/Poly.cpp
+    source/engine/entity/dummy/Poly.h
     
     # engine.component
     source/engine/component/Component.cpp
@@ -42,9 +45,15 @@ add_executable(
     source/engine/component/drawable/DrawComponent.cpp
     source/engine/component/drawable/DrawComponent.h
 
+    source/engine/component/drawable/DrawPolygonComponent.cpp
+    source/engine/component/drawable/DrawPolygonComponent.h
+
     # engine.component.rigidbody
     source/engine/component/rigidbody/RigidBodyComponent.cpp
     source/engine/component/rigidbody/RigidBodyComponent.h
+
+    source/engine/component/rigidbody/RigidBody2DComponent.cpp
+    source/engine/component/rigidbody/RigidBody2DComponent.h
 
     # engine.utils
     source/engine/utils/Math.cpp

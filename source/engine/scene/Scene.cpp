@@ -1,20 +1,20 @@
 #include "Scene.h"
 
-#include "../utils/builder/Director.h"
+#include <SDL2/SDL_log.h>
 
-#include <iostream>
+#include "../utils/builder/Director.h"
 
 Scene::Scene(Game *game):
     mGame       (game),
     mDirector   (nullptr),
     mIsUpdating (false)
 {
-    std::cout << "\tcreate 'Scene'.\n";
+    SDL_Log("\tcreate 'Scene'.\n");
 }
 
 Scene::~Scene()
 {
-    std::cout << "\tdelete 'Scene'.\n";
+    SDL_Log("\tdelete 'Scene'.\n");
     Scene::unload();
 }
 
@@ -37,7 +37,16 @@ void Scene::update(float dt)
 
 void Scene::draw(SDL_Renderer *renderer)
 {
+    for(GameObject *actor : mActors)
+    {
+        DrawComponent *drawable;
+        drawable = actor->getComponent<DrawComponent>();
 
+        if(drawable != nullptr && drawable->isEnabled())
+        {
+            drawable->draw(renderer);
+        }
+    }
 }
 
 /* cast actor into 'this' scene */
@@ -66,9 +75,18 @@ void Scene::unload()
 
 void Scene::load()
 {
-    mDirector = new Director(this);
-    Builder<GameObject> builder(this);
+    const std::vector<Vector2> vertices = {
+        Vector2(0,0),
+        Vector2(32,0),
+        Vector2(32,32),
+        Vector2(0,32)
+    };
 
-    mDirector->build(builder);
-    mDirector->build(builder);
+    const Color color(0xff,0,0,0xff);
+
+    mDirector = new Director(this);
+    Builder<Poly> builder(this);
+
+    mDirector->build(builder, vertices, color);
+    mDirector->build(builder, vertices, color);
 }
