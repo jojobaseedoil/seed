@@ -1,8 +1,13 @@
 #include "Game.h"
 
+#include "../scene/Scene.h"
+
+#include <iostream>
+
 Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mWindow       (nullptr),
     mRenderer     (nullptr),
+    mScene        (nullptr),
     mTitle        (title),
     mWidth        (screenWidth),
     mHeight       (screenHeight),
@@ -10,12 +15,13 @@ Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mIsRunning    (true),
     mIsPaused     (false)
 {
-
+    std::cout << "create 'Game'.\n";
 }
 
 Game::~Game()
 {
-
+    std::cout << "delete 'Game'.\n";
+    delete mScene;
 }
 
 /* game basic commands */
@@ -108,6 +114,12 @@ void Game::processInput()
                 break;
         }
     }
+
+    if(mScene != nullptr)
+    {
+        const Uint8 *keyboard = SDL_GetKeyboardState(nullptr);
+        mScene->processInput(keyboard);
+    }
 }
 
 void Game::updateGame()
@@ -123,18 +135,30 @@ void Game::updateGame()
 
     mTicksCounter = SDL_GetTicks();
 
-    SDL_Log("Delta Time : %f", dt);
+    if(mScene != nullptr)
+    {
+        mScene->update(dt);
+    }
+
+    // SDL_Log("Delta Time : %f", dt);
 }
 
 void Game::generateOutput()
 {
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(mRenderer);
+
+    if(mScene != nullptr)
+    {
+        mScene->draw(mRenderer);
+    }
+
     SDL_RenderPresent(mRenderer);
 }
 
 /* specific for every game */
 void Game::startScene()
 {
-
+    mScene = new Scene(this);
+    mScene->load();
 }

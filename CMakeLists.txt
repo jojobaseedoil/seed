@@ -21,6 +21,24 @@ add_executable(
     # engine.game
     source/engine/game/Game.cpp
     source/engine/game/Game.h
+
+    # engine.scene
+    source/engine/scene/Scene.cpp
+    source/engine/scene/Scene.h
+    
+    # engine.entity
+    source/engine/entity/GameObject.cpp
+    source/engine/entity/GameObject.h
+    
+    # engine.component
+    source/engine/component/Component.cpp
+    source/engine/component/Component.h
+
+    # engine.utils
+    source/engine/utils/Math.cpp
+    source/engine/utils/Math.h
+
+    source/engine/utils/Transform.h
 )
 
 # Link SDL

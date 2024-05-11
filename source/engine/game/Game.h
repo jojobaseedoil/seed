@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+class Scene;
+
 class Game
 {
 public:
@@ -31,9 +33,11 @@ protected:
     /* specific for every game */
     virtual void startScene();
 
-    /* game params */
+    /* 'Game' params */
     SDL_Window *mWindow;
     SDL_Renderer *mRenderer;
+
+    Scene *mScene;
 
     std::string mTitle;
     int mWidth;
