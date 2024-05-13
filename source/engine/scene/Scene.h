@@ -13,7 +13,7 @@ class Scene
 {
 public:
     Scene(Game *game);
-    ~Scene();
+    virtual ~Scene();
     
     /* update scene */
     void processInput(const Uint8 *keyboard);
@@ -22,11 +22,13 @@ public:
 
     /* attach actor into 'this' scene */
     void attach(GameObject *actor);
+    /* attach drawable into 'this' scene */
+    void attach(DrawComponent *drawable);
 
     /* start new scene */
     void action();
 
-private:
+protected:
     /* specific load/unload scene */
     virtual void unload();
     virtual void load();

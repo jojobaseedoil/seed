@@ -29,9 +29,6 @@ add_executable(
     # engine.entity
     source/engine/entity/GameObject.cpp
     source/engine/entity/GameObject.h
-
-    source/engine/entity/dummy/Poly.cpp
-    source/engine/entity/dummy/Poly.h
     
     # engine.component
     source/engine/component/Component.cpp
@@ -40,6 +37,9 @@ add_executable(
     # engine.component.collider
     source/engine/component/collider/ColliderComponent.cpp
     source/engine/component/collider/ColliderComponent.h
+
+    source/engine/component/collider/ColliderBoxComponent.cpp
+    source/engine/component/collider/ColliderBoxComponent.h
 
     # engine.component.drawable
     source/engine/component/drawable/DrawComponent.cpp
@@ -64,6 +64,19 @@ add_executable(
     # engine.utils.builder
     source/engine/utils/builder/Builder.h
     source/engine/utils/builder/Director.h
+
+    # engine.utils.observer
+    source/engine/utils/observer/Observer.cpp
+    source/engine/utils/observer/Observer.h
+
+    # demo.entity
+    source/demo/entity/Poly.cpp
+    source/demo/entity/Poly.h
+
+    # demo.scene
+    source/demo/scene/PolyScene.cpp
+    source/demo/scene/PolyScene.h
+
 )
 
 # Link SDL

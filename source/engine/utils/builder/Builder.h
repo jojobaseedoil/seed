@@ -1,18 +1,30 @@
 #pragma once
 
 #include <type_traits>
+#include <typeinfo>
 #include <memory>
 
 #include "../../entity/GameObject.h"
 #include "../../scene/Scene.h"
 
+
+/*
+    https://www.tutorialspoint.com/cplusplus-equivalent-of-instanceof
+*/
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) 
+{
+    return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
 template<typename T>
 class Builder
 {
 public:
-    Builder(Scene *scene): 
+    Builder(Scene *scene, const std::string &layer="Instances"): 
         entity (nullptr),
-        mScene (scene)
+        mScene (scene),
+        mLayer (layer)
     {
 
     }
@@ -20,7 +32,7 @@ public:
     template<typename... Args>
     void reset(Args&&... args)
     {
-        entity = new T(mScene, std::forward<Args>(args)...);
+        entity = new T(mScene, mLayer, std::forward<Args>(args)...);
     }
 
     T *getProduct()
@@ -67,6 +79,12 @@ public:
             for(Component *c : components)
             {
                 entity->attach(c);
+
+                if(instanceof<DrawComponent>(c))
+                {
+                    DrawComponent *drawable = dynamic_cast<DrawComponent*>(c);
+                    mScene->attach(drawable);
+                }
             }
         }
     }
@@ -74,5 +92,7 @@ public:
 private:
     T *entity;
     Scene *mScene;
+    std::string mLayer;
+
     static_assert(std::is_base_of<GameObject, T>::value, "T must be a GameObject.");
 };

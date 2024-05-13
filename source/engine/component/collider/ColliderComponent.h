@@ -1,17 +1,26 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "../Component.h"
+#include "../../utils/observer/Observer.h"
 
 class ColliderComponent : public Component
 {
 public:
-    ColliderComponent(GameObject *owner);
+    ColliderComponent(GameObject *owner, Observer *obs);
 
-    /* check if its an intersection between two colliders */
-    virtual bool intersect(ColliderComponent *other) = 0;
+    void update(float dt) override;
 
-    /* */
-    void detectCollision(std::vector<ColliderComponent*> &colliders);
+    virtual void resolve(GameObject *other) = 0;
+    virtual bool intersect(GameObject *other) = 0;
+
+    void scan(const std::string &layer, std::vector<GameObject*> &responses);
+
+    void addLayersFrom(const std::vector<std::string> &layers);
+
+private:
+    std::vector<std::string> mLayers;
+    Observer *mObserver;
 };

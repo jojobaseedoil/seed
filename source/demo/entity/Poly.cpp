@@ -2,14 +2,18 @@
 
 #include <SDL2/SDL.h>
 
-#include "../../component/rigidbody/RigidBody2DComponent.h"
+#include "../../engine/component/rigidbody/RigidBody2DComponent.h"
+// #include "../../engine/component/collider/ColliderBoxComponent.h"
+
+#include "../scene/PolyScene.h"
 
 Poly::Poly(
     Scene *scene, 
+    const std::string &layer,
     const std::vector<Vector2> &vertices, 
     const Color &col
 ):
-    GameObject (scene),
+    GameObject (scene, layer),
     mVertices  (vertices),
     mColor     (col)
 {
@@ -75,4 +79,11 @@ void Poly::onProcessInput(const Uint8 *keyboard)
         vel.Normalize();
         rigidbody->applyForce(vel*5000);
     }
+}
+
+#include <iostream>
+void Poly::onCollision(GameObject *other)
+{
+    static int ct = 0;
+    std::cout << "collision " << ++ct << "\n";
 }

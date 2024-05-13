@@ -1,4 +1,5 @@
-#include "engine/game/Game.h"
+// #include "engine/game/Game.h"
+#include "demo/game/Demo.h"
 
 #define SCREEN_WIDTH  800
 #define SCREEN_HEIGHT 600
@@ -6,7 +7,7 @@
 
 int main(int argc, char **argv)
 {
-    Game game(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE);
+    Demo game(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE);
 
     if(game.start())
     {

@@ -11,7 +11,7 @@ public:
     RigidBody2DComponent(
         GameObject *owner, 
         float mass     = 1.0f, 
-        float friction = 5.0f, 
+        float friction = 12.5f, 
         bool gravity   = false
     );
 

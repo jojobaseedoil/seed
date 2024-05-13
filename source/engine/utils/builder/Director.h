@@ -1,14 +1,18 @@
 #pragma once
 
 #include "Builder.h"
+#include "../observer/Observer.h"
 
 /* gameobjects */
-#include "../../entity/dummy/Poly.h"
+#include "../../../demo/entity/Poly.h"
 
 /* components */ 
-#include "../../component/Component.h"
 #include "../../component/drawable/DrawPolygonComponent.h"
 #include "../../component/rigidbody/RigidBody2DComponent.h"
+#include "../../component/collider/ColliderBoxComponent.h"
+
+#include <iostream>
+
 
 class Director
 {
@@ -34,7 +38,8 @@ public:
         mScene->attach(entity);
     }
 
-    void build(Builder<Poly> &builder, const std::vector<Vector2> &vertices, const Color &color)
+
+    void build(Builder<Poly> &builder, Observer *obs, const std::vector<Vector2> &vertices, const Color &color)
     {   
         /* create new entity */
         builder.reset(vertices, color);
@@ -42,10 +47,17 @@ public:
         /* get entity */
         Poly *entity = builder.getProduct();
 
+        obs->subscribe(entity->layer(), entity);
+
         /* add components */
         builder.setComponents({
             new DrawPolygonComponent(entity,vertices,color),
-            new RigidBody2DComponent(entity)
+            new RigidBody2DComponent(entity),
+            new ColliderBoxComponent(entity, obs)
+        });
+
+        entity->getComponent<ColliderBoxComponent>()->addLayersFrom({
+            "Instances"
         });
 
         mScene->attach(entity);

@@ -2,32 +2,43 @@
 
 #include "../../entity/GameObject.h"
 
-ColliderComponent::ColliderComponent(GameObject *owner): Component(owner)
+
+ColliderComponent::ColliderComponent(GameObject *owner, Observer *obs):
+    Component (owner),
+    mObserver (obs)
 {
 
 }
 
-void ColliderComponent::detectCollision(std::vector<ColliderComponent*> &colliders)
+void ColliderComponent::update(float dt)
 {
-    /*
-        decide what should I pass to the owner later
-        and then, change onCollision() to onCollision(responses);
-    */ 
-    std::vector<ColliderComponent*> responses; 
+    std::vector<GameObject*> responses;
 
-    for(ColliderComponent *other : colliders)
+    for(const std::string &layer : mLayers)
     {
-        if(!other->isEnabled() && other == nullptr)
-        {
-            continue;   
-        }
+        scan(layer, responses);
+    }
 
-        if(this->intersect(other))
+    mObserver->notify(mOwner, responses);
+}
+
+void ColliderComponent::scan(const std::string &layer, std::vector<GameObject*> &responses)
+{
+    std::list<GameObject*> listeners = mObserver->listenersOf(layer);
+
+    for(GameObject *other : listeners)
+    {
+        if(intersect(other))
         {
             responses.push_back(other);
         }
     }
+}
 
-    /* callback to resolve collisions */
-    mOwner->onCollision();
+void ColliderComponent::addLayersFrom(const std::vector<std::string> &layers)
+{
+    for(const std::string &layer : layers)
+    {
+        mLayers.push_back(layer);
+    }
 }

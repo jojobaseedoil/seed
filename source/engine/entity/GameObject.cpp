@@ -2,10 +2,12 @@
 
 #include <SDL2/SDL_log.h>
 
+#include "../component/collider/ColliderComponent.h"
 #include "../component/Component.h"
 
-GameObject::GameObject(Scene *scene):
+GameObject::GameObject(Scene *scene, const std::string &layer):
     mScene     (scene),
+    mLayer     (layer),
     mTransform (Transform()),
     mState     (State::Active)
 {
@@ -113,10 +115,16 @@ void GameObject::detectCollision()
     
 }
 
-void GameObject::onCollision()
+void GameObject::onCollision(GameObject *other)
 {
 
 }
+
+const std::string &GameObject::layer() const
+{
+    return mLayer;
+}
+
 
 /* specific update */
 void GameObject::onProcessInput(const Uint8 *keyboard)

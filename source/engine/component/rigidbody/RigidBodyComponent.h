@@ -6,7 +6,7 @@
 class RigidBodyComponent : public Component
 {
 public:
-    RigidBodyComponent(GameObject *owner, float mass=1.0f, float friction=0.0f);
+    RigidBodyComponent(GameObject *owner, float mass=1.0f, float friction=12.5f);
     
     virtual void applyForce(const Vector2 &force) = 0;
 

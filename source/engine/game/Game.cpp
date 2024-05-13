@@ -51,7 +51,7 @@ bool Game::start()
         return false;
     }
 
-    Game::startScene();
+    startScene();
 
     return true;
 }
@@ -143,7 +143,7 @@ void Game::updateGame()
 
 void Game::generateOutput()
 {
-    SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xFF);
+    SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
     SDL_RenderClear(mRenderer);
 
     if(mScene != nullptr)
@@ -157,6 +157,5 @@ void Game::generateOutput()
 /* specific for every game */
 void Game::startScene()
 {
-    mScene = new Scene(this);
-    mScene->action();
+
 }

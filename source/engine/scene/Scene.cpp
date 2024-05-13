@@ -37,22 +37,25 @@ void Scene::update(float dt)
 
 void Scene::draw(SDL_Renderer *renderer)
 {
-    for(GameObject *actor : mActors)
+    for(DrawComponent *drawable : mDrawables)
     {
-        DrawComponent *drawable;
-        drawable = actor->getComponent<DrawComponent>();
-
-        if(drawable != nullptr && drawable->isEnabled())
+        if( drawable != nullptr && drawable->isEnabled() )
         {
             drawable->draw(renderer);
         }
     }
 }
 
-/* cast actor into 'this' scene */
+/* attach actor into 'this' scene */
 void Scene::attach(GameObject *actor)
 {
     mActors.push_back(actor);
+}
+
+/* attach drawable into 'this' scene */
+void Scene::attach(DrawComponent *drawable)
+{
+    mDrawables.push_back(drawable);
 }
 
 /* start new scene */
@@ -75,18 +78,5 @@ void Scene::unload()
 
 void Scene::load()
 {
-    const std::vector<Vector2> vertices = {
-        Vector2(0,0),
-        Vector2(32,0),
-        Vector2(32,32),
-        Vector2(0,32)
-    };
 
-    const Color color(0xff,0,0,0xff);
-
-    mDirector = new Director(this);
-    Builder<Poly> builder(this);
-
-    mDirector->build(builder, vertices, color);
-    mDirector->build(builder, vertices, color);
 }

@@ -1,12 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <SDL2/SDL_stdinc.h>
 
 #include "../utils/Transform.h"
 
 class Scene;
 class Component;
+class ColliderComponent;
 
 enum class State
 {
@@ -16,7 +18,7 @@ enum class State
 class GameObject
 {
 public:
-    GameObject(Scene *scene);
+    GameObject(Scene *scene, const std::string &layer="Instances");
     virtual ~GameObject();
 
     /* update game object */
@@ -59,7 +61,9 @@ public:
 
     /* specific collision check */
     virtual void detectCollision();
-    virtual void onCollision();
+    virtual void onCollision(GameObject *other);
+
+    const std::string &layer() const;
 
 protected:
     /* specific update */
@@ -69,6 +73,8 @@ protected:
     /* 'GameObject' params */
     Scene *mScene;
     
+    std::string mLayer;
+
     std::vector<Component*> mComponents;
     Transform mTransform;
     State mState;
