@@ -2,9 +2,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "../../engine/component/rigidbody/RigidBody2DComponent.h"
-// #include "../../engine/component/collider/ColliderBoxComponent.h"
-
 #include "../scene/PolyScene.h"
 
 Poly::Poly(
@@ -22,10 +19,13 @@ Poly::Poly(
 
 void Poly::onProcessInput(const Uint8 *keyboard)
 {
-    auto rigidbody = this->getComponent<RigidBody2DComponent>();
+    RigidBody2DComponent *rigidbody;
+    rigidbody = getComponent<RigidBody2DComponent>();
 
     if(rigidbody == nullptr)
+    {
         return;
+    }
 
     Vector2 vel = rigidbody->getVelocity();
     bool pressedMovementKey = false;
@@ -84,6 +84,11 @@ void Poly::onProcessInput(const Uint8 *keyboard)
 #include <iostream>
 void Poly::onCollision(GameObject *other)
 {
-    static int ct = 0;
-    std::cout << "collision " << ++ct << "\n";
+    AABB *collider;
+    collider = getComponent<AABB>();
+
+    if(collider != nullptr)
+    {
+        collider->resolve(other);
+    }
 }

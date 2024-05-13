@@ -9,10 +9,7 @@
 /* components */ 
 #include "../../component/drawable/DrawPolygonComponent.h"
 #include "../../component/rigidbody/RigidBody2DComponent.h"
-#include "../../component/collider/ColliderBoxComponent.h"
-
-#include <iostream>
-
+#include "../../component/collider/AABB.h"
 
 class Director
 {
@@ -53,10 +50,10 @@ public:
         builder.setComponents({
             new DrawPolygonComponent(entity,vertices,color),
             new RigidBody2DComponent(entity),
-            new ColliderBoxComponent(entity, obs)
+            new AABB(entity, obs)
         });
 
-        entity->getComponent<ColliderBoxComponent>()->addLayersFrom({
+        entity->getComponent<AABB>()->addLayersFrom({
             "Instances"
         });
 

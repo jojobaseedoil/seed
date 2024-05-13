@@ -38,8 +38,8 @@ add_executable(
     source/engine/component/collider/ColliderComponent.cpp
     source/engine/component/collider/ColliderComponent.h
 
-    source/engine/component/collider/ColliderBoxComponent.cpp
-    source/engine/component/collider/ColliderBoxComponent.h
+    source/engine/component/collider/AABB.cpp
+    source/engine/component/collider/AABB.h
 
     # engine.component.drawable
     source/engine/component/drawable/DrawComponent.cpp

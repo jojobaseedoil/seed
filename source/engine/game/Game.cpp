@@ -138,7 +138,7 @@ void Game::updateGame()
         mScene->update(dt);
     }
 
-    SDL_Log("Delta Time : %f", dt);
+    // SDL_Log("Delta Time : %f", dt);
 }
 
 void Game::generateOutput()

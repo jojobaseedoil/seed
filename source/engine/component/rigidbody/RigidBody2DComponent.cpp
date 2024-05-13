@@ -22,18 +22,18 @@ void RigidBody2DComponent::applyForce(const Vector2 &force)
 
 void RigidBody2DComponent::update(float dt)
 {
+    // Apply gravity
+    if(mGravity == true)
+    {
+        applyForce(Vector2::UnitY * GRAVITY);
+    }
+
     // Apply friction
     if(mVelocity.x != 0.0f) {
         applyForce(Vector2::UnitX * -mFriction * mVelocity.x);
     }
     if(mVelocity.y != 0.0f) {
         applyForce(Vector2::UnitY * -mFriction * mVelocity.y);
-    }
-
-    // Apply gravity
-    if(mGravity == true)
-    {
-        applyForce(Vector2::UnitY * GRAVITY);
     }
 
     // Euler Integration
@@ -44,16 +44,15 @@ void RigidBody2DComponent::update(float dt)
     mVelocity.y = Math::Clamp<float>(mVelocity.y, -GRAVITY, GRAVITY);
 
     if(Math::NearZero(mVelocity.x, 1.0f)) {
-        mVelocity.x = 0.f;
+        mVelocity.x = 0.0f;
     }
     if(Math::NearZero(mVelocity.y, 1.0f)) {
-        mVelocity.y = 0.f;
+        mVelocity.y = 0.0f;
     }
 
-    Vector2 position = mOwner->position();
     mOwner->translate(mVelocity * dt);
 
-    mAcceleration.Set(0.f, 0.f);
+    mAcceleration.Set(0.0f, 0.0f);
 }
 
 /* enable disable gravity */

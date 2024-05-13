@@ -39,5 +39,7 @@ void PolyScene::load()
     }
 
     mPolygons[0]->translate(Vector2(128,0));
+
+    mPolygons[1]->translate(Vector2(128,128));
     mPolygons[1]->setState(State::Paused);
 }
