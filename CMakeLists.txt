@@ -48,6 +48,9 @@ add_executable(
     source/engine/component/drawable/DrawPolygonComponent.cpp
     source/engine/component/drawable/DrawPolygonComponent.h
 
+    source/engine/component/drawable/Sprite.cpp
+    source/engine/component/drawable/Sprite.h
+
     # engine.component.rigidbody
     source/engine/component/rigidbody/RigidBodyComponent.cpp
     source/engine/component/rigidbody/RigidBodyComponent.h
@@ -69,15 +72,22 @@ add_executable(
     source/engine/utils/observer/Observer.cpp
     source/engine/utils/observer/Observer.h
 
+    # demo.game
+    source/demo/game/Env.cpp
+    source/demo/game/Env.h
+
     # demo.entity
     source/demo/entity/Poly.cpp
     source/demo/entity/Poly.h
 
+    source/demo/entity/Dummy.cpp
+    source/demo/entity/Dummy.h
+
     # demo.scene
-    source/demo/scene/PolyScene.cpp
-    source/demo/scene/PolyScene.h
+    source/demo/scene/EnvScene.cpp
+    source/demo/scene/EnvScene.h
 
 )
 
 # Link SDL
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} -lSDL2_image)

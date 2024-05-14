@@ -7,7 +7,6 @@ class Game;
 class SDL_Renderer;
 class GameObject;
 class DrawComponent;
-class Director;
 
 class Scene
 {
@@ -35,8 +34,6 @@ protected:
 
     /* 'Scene' params */
     Game *mGame;
-
-    Director *mDirector;
 
     std::vector<GameObject*> mActors;
     std::vector<GameObject*> mPendingActors;

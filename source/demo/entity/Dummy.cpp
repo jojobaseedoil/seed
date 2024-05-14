@@ -1,23 +1,16 @@
-#include "Poly.h"
+#include "Dummy.h"
 
 #include <SDL2/SDL.h>
 
 #include "../scene/EnvScene.h"
 
-Poly::Poly(
-    Scene *scene, 
-    const std::string &layer,
-    const std::vector<Vector2> &vertices, 
-    const Color &col
-):
-    GameObject (scene, layer),
-    mVertices  (vertices),
-    mColor     (col)
+Dummy::Dummy(Scene *scene, const std::string &layer):
+    GameObject(scene, layer)
 {
-    
+
 }
 
-void Poly::onProcessInput(const Uint8 *keyboard)
+void Dummy::onProcessInput(const Uint8 *keyboard)
 {
     RigidBody2DComponent *rigidbody;
     rigidbody = getComponent<RigidBody2DComponent>();
@@ -81,13 +74,17 @@ void Poly::onProcessInput(const Uint8 *keyboard)
     }
 }
 
-void Poly::onCollision(GameObject *other)
+void Dummy::onUpdate(float dt)
 {
-    AABB *collider;
-    collider = getComponent<AABB>();
 
+}
+
+void Dummy::onCollision(GameObject *other)
+{
+    AABB *collider = getComponent<AABB>();
+    
     if(collider != nullptr)
     {
         collider->resolve(other);
-    }
+    } 
 }

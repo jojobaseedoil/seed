@@ -4,10 +4,12 @@
 #include "../observer/Observer.h"
 
 /* gameobjects */
-#include "../../../demo/entity/Poly.h"
+#include "../../../demo/entity/Dummy.h"
 
 /* components */ 
 #include "../../component/drawable/DrawPolygonComponent.h"
+#include "../../component/drawable/Sprite.h"
+
 #include "../../component/rigidbody/RigidBody2DComponent.h"
 #include "../../component/collider/AABB.h"
 
@@ -19,45 +21,34 @@ public:
 
     }
 
-    void build(Builder<GameObject> &builder)
-    {   
-        /* create new entity */
-        builder.reset();
+    template<typename T>
+    void build(const std::string &layer, float x, float y)
+    {
+        Builder<T> builder;
 
-        /* get entity */
-        GameObject *entity = builder.getProduct();
-
-        /* add components */
-        builder.setComponents({
-            new Component(entity)
-        });
+        T *entity = construct(builder, layer, x, y);
 
         mScene->attach(entity);
     }
 
+private:
 
-    void build(Builder<Poly> &builder, Observer *obs, const std::vector<Vector2> &vertices, const Color &color)
+    Dummy *construct(Builder<Dummy> &builder, const std::string &layer, float x, float y)
     {   
-        /* create new entity */
-        builder.reset(vertices, color);
+        /* construct entity */
+        builder.reset(mScene, layer);
 
-        /* get entity */
-        Poly *entity = builder.getProduct();
+        Dummy *entity = builder.getProduct();
 
-        obs->subscribe(entity->layer(), entity);
+        builder.setPosition(Vector2(x,y));
 
         /* add components */
-        builder.setComponents({
-            new DrawPolygonComponent(entity,vertices,color),
+        builder.setComponents(mScene,{
+            new Sprite(entity),
             new RigidBody2DComponent(entity),
-            new AABB(entity, obs)
         });
 
-        entity->getComponent<AABB>()->addLayersFrom({
-            "Instances"
-        });
-
-        mScene->attach(entity);
+        return entity;
     }
 
 private:

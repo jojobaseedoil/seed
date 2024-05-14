@@ -21,18 +21,15 @@ template<typename T>
 class Builder
 {
 public:
-    Builder(Scene *scene, const std::string &layer="Instances"): 
-        entity (nullptr),
-        mScene (scene),
-        mLayer (layer)
+    Builder(): entity(nullptr)
     {
 
     }
 
     template<typename... Args>
-    void reset(Args&&... args)
+    void reset(Scene *scene, const std::string &layer, Args&&... args)
     {
-        entity = new T(mScene, mLayer, std::forward<Args>(args)...);
+        entity = new T(scene, layer, std::forward<Args>(args)...);
     }
 
     T *getProduct()
@@ -72,7 +69,7 @@ public:
         }
     }
 
-    void setComponents(const std::vector<Component*> &components)
+    void setComponents(Scene *scene, const std::vector<Component*> &components)
     {
         if(entity != nullptr)
         {
@@ -83,7 +80,7 @@ public:
                 if(instanceof<DrawComponent>(c))
                 {
                     DrawComponent *drawable = dynamic_cast<DrawComponent*>(c);
-                    mScene->attach(drawable);
+                    scene->attach(drawable);
                 }
             }
         }
@@ -91,8 +88,6 @@ public:
 
 private:
     T *entity;
-    Scene *mScene;
-    std::string mLayer;
 
     static_assert(std::is_base_of<GameObject, T>::value, "T must be a GameObject.");
 };

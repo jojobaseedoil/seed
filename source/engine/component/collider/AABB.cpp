@@ -14,17 +14,17 @@ AABB::AABB(GameObject *owner, Observer *obs, float w, float h):
 
 bool AABB::intersect(GameObject *other)
 {
-    auto collider = other->getComponent<AABB>();
+    AABB *collider = other->getComponent<AABB>();
     
     if( collider == nullptr || !collider->isEnabled() || this == collider)
     {
         return false;
     }
 
-    return max().x > collider->min().x &&
-           min().x < collider->max().x &&
-           min().y < collider->max().y &&
-           max().y > collider->min().y;
+    return max().x >= collider->min().x &&
+           min().x <= collider->max().x &&
+           max().y >= collider->min().y &&
+           min().y <= collider->max().y;
 }
 
 void AABB::resolve(GameObject *other)
@@ -46,15 +46,15 @@ void AABB::resolve(GameObject *other)
     const int DOWN  = 3;
 
     /* get min overlap */
-    std::unordered_map<int, double> overlap;
+    std::unordered_map<int, float> overlap;
     
-    overlap[LEFT]   = collider->max().x - min().x;
-    overlap[RIGHT]  = collider->min().x - max().x;
-    overlap[TOP] = collider->max().y - min().y;
+    overlap[LEFT]  = collider->max().x - min().x;
+    overlap[RIGHT] = collider->min().x - max().x;
+    overlap[TOP]   = collider->max().y - min().y;
     overlap[DOWN]  = collider->min().y - max().y;
 
-    double dist = overlap[LEFT];
-    int    side = LEFT;
+    float dist = overlap[LEFT];
+    int   side = LEFT;
 
     for(int i=1; i<4; i++)
     {
@@ -67,20 +67,16 @@ void AABB::resolve(GameObject *other)
 
     /* apply the collision */
     Vector2 vel = rigidbody->getVelocity();
-    Vector2 pos = mOwner->position();
+    Vector2 pos;
 
     if(vel.y > 0.0f && side==DOWN || vel.y < 0.0f && side==TOP)
     {
-        pos.x = 0.0f;
-        pos.y = dist;
-        
+        pos = Vector2(0.0f, dist);
         vel.y = 0.0f;
     }
     else if(vel.x > 0.0f && side==RIGHT || vel.x < 0.0f && side==LEFT)
     {
-        pos.x = dist;
-        pos.y = 0.0f;
-
+        pos = Vector2(dist, 0.0f);
         vel.x = 0.0f;
     }
 

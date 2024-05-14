@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include <SDL_image.h>
+
 #include "../scene/Scene.h"
 
 Game::Game(int screenWidth, int screenHeight, const std::string &title):
@@ -51,6 +53,12 @@ bool Game::start()
         return false;
     }
 
+    if(IMG_Init(IMG_INIT_PNG) == 0)
+    {
+        SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
+        return false;
+    }
+
     startScene();
 
     return true;
@@ -68,6 +76,7 @@ void Game::run()
 
 void Game::shutdown()
 {
+    IMG_Quit();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
@@ -138,7 +147,7 @@ void Game::updateGame()
         mScene->update(dt);
     }
 
-    // SDL_Log("Delta Time : %f", dt);
+    SDL_Log("Delta Time : %f", dt);
 }
 
 void Game::generateOutput()

@@ -2,6 +2,8 @@
 
 #include "../../entity/GameObject.h"
 
+#include <SDL2/SDL_log.h>
+
 RigidBody2DComponent::RigidBody2DComponent(
     GameObject *owner, 
     float mass,
@@ -22,6 +24,8 @@ void RigidBody2DComponent::applyForce(const Vector2 &force)
 
 void RigidBody2DComponent::update(float dt)
 {
+    // SDL_Log("velocity (%f, %f)", mVelocity.x, mVelocity.y);
+
     // Apply gravity
     if(mGravity == true)
     {

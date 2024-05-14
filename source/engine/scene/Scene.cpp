@@ -6,7 +6,6 @@
 
 Scene::Scene(Game *game):
     mGame       (game),
-    mDirector   (nullptr),
     mIsUpdating (false)
 {
     SDL_Log("\tcreate 'Scene'.\n");
@@ -68,8 +67,6 @@ void Scene::action()
 /* specific load/unload scene */
 void Scene::unload()
 {
-    delete mDirector;
-
     for(GameObject *actor : mActors)
     {
         delete actor;
