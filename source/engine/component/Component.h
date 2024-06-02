@@ -7,22 +7,12 @@ class GameObject;
 class Component
 {
 public:
-    Component(GameObject *owner);
-    virtual ~Component();
+    friend class GameObject;
 
-    /* update component */
-    virtual void processInput(const Uint8 *keyboard);
-    virtual void update(float dt);
+    virtual ~Component() = default;
 
-    /* check if component is enabled */
-    bool isEnabled() const;
-    
-    /* enable/disable component */
-    void enable();
-    void disable();
+    virtual void Update(float deltaTime);
 
 protected:
-    /* 'Component' params */
-    GameObject *mOwner;
-    bool mIsEnabled;
+    GameObject *mGameObject = nullptr;
 };

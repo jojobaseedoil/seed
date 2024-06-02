@@ -1,6 +1,6 @@
 #include "Game.h"
 
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 #include "../scene/Scene.h"
 
@@ -15,17 +15,16 @@ Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mIsRunning    (true),
     mIsPaused     (false)
 {
-    SDL_Log("create 'Game'");
+
 }
 
 Game::~Game()
 {
-    SDL_Log("create 'Game'");
     delete mScene;
 }
 
 /* game basic commands */
-bool Game::start()
+bool Game::Start()
 {
     if( SDL_Init(SDL_INIT_VIDEO) != 0 )
     {
@@ -36,10 +35,10 @@ bool Game::start()
     SDL_DisplayMode dm;
     SDL_GetCurrentDisplayMode(0, &dm);
 
-    int windowX = (dm.w - screenWidth() ) / 2;
-    int windowY = (dm.h - screenHeight()) / 2;
+    int windowX = (dm.w - ScreenWidth() ) / 2;
+    int windowY = (dm.h - ScreenHeight()) / 2;
 
-    mWindow = SDL_CreateWindow(mTitle.c_str(), windowX, windowY, screenWidth(), screenHeight(), 0);
+    mWindow = SDL_CreateWindow(mTitle.c_str(), windowX, windowY, ScreenWidth(), ScreenHeight(), 0);
     if(!mWindow)
     {
         SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -59,22 +58,22 @@ bool Game::start()
         return false;
     }
 
-    startScene();
+    StartScene();
 
     return true;
 }
 
-void Game::run()
+void Game::Run()
 {
     while(mIsRunning)
     {
-        processInput();
-        updateGame();
-        generateOutput();
+        ProcessInput();
+        UpdateGame();
+        GenerateOutput();
     }
 }
 
-void Game::shutdown()
+void Game::Shutdown()
 {
     IMG_Quit();
     SDL_DestroyRenderer(mRenderer);
@@ -82,34 +81,34 @@ void Game::shutdown()
     SDL_Quit();
 }
 
-void Game::quit()
+void Game::Quit()
 {
     mIsRunning = false;
 }
 
-void Game::pause()
+void Game::Pause()
 {
     mIsPaused = true;
 }
 
-void Game::resume()
+void Game::Resume()
 {
     mIsPaused = false;
 }
 
 /* game info */
-int Game::screenWidth() const
+int Game::ScreenWidth() const
 {
     return mWidth;
 }
 
-int Game::screenHeight() const
+int Game::ScreenHeight() const
 {
     return mHeight;
 }
 
 /* main loop */
-void Game::processInput()
+void Game::ProcessInput()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -117,54 +116,43 @@ void Game::processInput()
         switch (event.type)
         {
             case SDL_QUIT:
-                quit();
+                Quit();
                 break;
         }
     }
-
-    if(mScene != nullptr)
-    {
-        const Uint8 *keyboard = SDL_GetKeyboardState(nullptr);
-        mScene->processInput(keyboard);
-    }
 }
 
-void Game::updateGame()
+void Game::UpdateGame()
 {
     while( !SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCounter + 16) );
 
-    float dt = (float)(SDL_GetTicks() - mTicksCounter) / 1000.0f;
+    float deltaTime = (float)(SDL_GetTicks() - mTicksCounter) / 1000.0f;
     
-    if(dt > 0.05f)
+    if(deltaTime > 0.05f)
     {
-        dt = 0.05f;
+        deltaTime = 0.05f;
     }
 
     mTicksCounter = SDL_GetTicks();
 
+    SDL_Log("Delta Time : %f", deltaTime);
+
     if(mScene != nullptr)
     {
-        mScene->update(dt);
+        mScene->Update(deltaTime);
     }
-
-    SDL_Log("Delta Time : %f", dt);
 }
 
-void Game::generateOutput()
+void Game::GenerateOutput()
 {
-    SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
-    SDL_RenderClear(mRenderer);
-
-    if(mScene != nullptr)
-    {
-        mScene->draw(mRenderer);
-    }
-
     SDL_RenderPresent(mRenderer);
+    SDL_RenderClear(mRenderer);
+    SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
 }
 
 /* specific for every game */
-void Game::startScene()
+void Game::StartScene()
 {
-
+    mScene = new Scene(this, mRenderer);
+    mScene->Start();
 }

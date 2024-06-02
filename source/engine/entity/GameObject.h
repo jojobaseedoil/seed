@@ -1,81 +1,61 @@
-#pragma once
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 
 #include <vector>
-#include <string>
 #include <SDL2/SDL_stdinc.h>
 
-#include "../utils/Transform.h"
+#include "../component/Transform.h"
 
 class Scene;
 class Component;
-class ColliderComponent;
-
-enum class State
-{
-    Active, Paused, Destroy
-};
 
 class GameObject
 {
 public:
-    GameObject(Scene *scene, const std::string &layer="Instances");
+    GameObject();
     virtual ~GameObject();
 
-    /* update game object */
-    void processInput(const Uint8 *keyboard);
-    void update(float dt);
+    void Update(float deltaTime);
 
-    /* transform setters */
-    void translate(const Vector2 &p);
-    void rotate(const Vector2 &r);
-    void scale(const Vector2 &s);
+    template <typename T, typename... Args>
+    T *AddComponent(Args&&... args);
 
-    /* transform getters */
-    const Vector2 &position() const;
-    const Vector2 &rotation() const;
-    const Vector2 &scale() const;
-
-    /* gameObject state */
-    void setState(const State &state);
-    const State &getState() const;
-
-    /* attach component into 'this' GameObject */
-    void attach(Component *c);
-
-    /* search for a component of type T */
     template<typename T>
-    T *getComponent()
-    {
-        for(Component *c : mComponents)
-        {
-            T *t = dynamic_cast<T*>(c);
+    T *GetComponent();
 
-            if(t != nullptr)
-            {
-                return t;
-            }
-        }
+    static void Destroy(GameObject *entity);
 
-        return nullptr;
-    }
-
-    /* specific collision check */
-    virtual void detectCollision();
-    virtual void onCollision(GameObject *other);
-
-    const std::string &layer() const;
-
-protected:
-    /* specific update */
-    virtual void onProcessInput(const Uint8 *keyboard);
-    virtual void onUpdate(float dt);
-
-    /* 'GameObject' params */
-    Scene *mScene;
+    Transform transform;
     
-    std::string mLayer;
+protected:    
+    Scene *mScene;
 
     std::vector<Component*> mComponents;
-    Transform mTransform;
-    State mState;
 };
+
+template <typename T, typename... Args>
+T *GameObject::AddComponent(Args&&... args)
+{
+    T* component = new T(std::forward<Args>(args)...);
+    component->mGameObject = this;
+    mComponents.emplace_back(component);
+    return component;
+}
+
+template<typename T>
+T *GameObject::GetComponent()
+{
+    for(Component *c : mComponents)
+    {
+        T *t = dynamic_cast<T*>(c);
+
+        if(t != nullptr)
+        {
+            return t;
+        }
+    }
+
+    return nullptr;
+}
+
+#endif // GAMEOBJECT_H

@@ -35,58 +35,33 @@ add_executable(
     source/engine/component/Component.h
 
     # engine.component.collider
-    source/engine/component/collider/ColliderComponent.cpp
-    source/engine/component/collider/ColliderComponent.h
+    source/engine/component/Collider.h
 
-    source/engine/component/collider/AABB.cpp
-    source/engine/component/collider/AABB.h
-
+    source/engine/component/BoxCollider.cpp
+    source/engine/component/BoxCollider.h
+    
     # engine.component.drawable
-    source/engine/component/drawable/DrawComponent.cpp
-    source/engine/component/drawable/DrawComponent.h
+    source/engine/component/Render.cpp
+    source/engine/component/Render.h
 
-    source/engine/component/drawable/DrawPolygonComponent.cpp
-    source/engine/component/drawable/DrawPolygonComponent.h
-
-    source/engine/component/drawable/Sprite.cpp
-    source/engine/component/drawable/Sprite.h
+    source/engine/component/Sprite.cpp
+    source/engine/component/Sprite.h
 
     # engine.component.rigidbody
-    source/engine/component/rigidbody/RigidBodyComponent.cpp
-    source/engine/component/rigidbody/RigidBodyComponent.h
-
-    source/engine/component/rigidbody/RigidBody2DComponent.cpp
-    source/engine/component/rigidbody/RigidBody2DComponent.h
+    source/engine/component/RigidBody.cpp
+    source/engine/component/RigidBody.h
 
     # engine.utils
     source/engine/utils/Math.cpp
     source/engine/utils/Math.h
-
-    source/engine/utils/Transform.h
 
     # engine.utils.builder
     source/engine/utils/builder/Builder.h
     source/engine/utils/builder/Director.h
 
     # engine.utils.observer
-    source/engine/utils/observer/Observer.cpp
-    source/engine/utils/observer/Observer.h
-
-    # demo.game
-    source/demo/game/Env.cpp
-    source/demo/game/Env.h
-
-    # demo.entity
-    source/demo/entity/Poly.cpp
-    source/demo/entity/Poly.h
-
-    source/demo/entity/Dummy.cpp
-    source/demo/entity/Dummy.h
-
-    # demo.scene
-    source/demo/scene/EnvScene.cpp
-    source/demo/scene/EnvScene.h
-
+    # source/engine/utils/observer/Observer.cpp
+    # source/engine/utils/observer/Observer.h
 )
 
 # Link SDL

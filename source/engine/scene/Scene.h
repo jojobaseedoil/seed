@@ -1,43 +1,35 @@
 #pragma once
 
 #include <vector>
-#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_render.h>
 
 class Game;
-class SDL_Renderer;
 class GameObject;
-class DrawComponent;
 
 class Scene
 {
 public:
-    Scene(Game *game);
+    Scene(Game *game, SDL_Renderer *renderer);
     virtual ~Scene();
     
-    /* update scene */
-    void processInput(const Uint8 *keyboard);
-    void update(float dt);
-    void draw(SDL_Renderer *renderer);
+    void Update(float deltaTime);
 
-    /* attach actor into 'this' scene */
-    void attach(GameObject *actor);
-    /* attach drawable into 'this' scene */
-    void attach(DrawComponent *drawable);
+    template <typename T, typename... Args>
+    T* AddPrefab(Args&&... args);
 
-    /* start new scene */
-    void action();
+    void Start();
+
+    SDL_Renderer *renderer;
 
 protected:
-    /* specific load/unload scene */
-    virtual void unload();
-    virtual void load();
+    virtual void Unload();
+    virtual void Load();
 
     /* 'Scene' params */
     Game *mGame;
 
-    std::vector<GameObject*> mActors;
-    std::vector<GameObject*> mPendingActors;
-    std::vector<DrawComponent*> mDrawables;
+    std::vector<GameObject*> mEntities;
+    std::vector<GameObject*> mPendingEntities;
 
     bool mIsUpdating;
 };

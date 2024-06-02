@@ -2,78 +2,51 @@
 
 #include <SDL2/SDL_log.h>
 
-#include "../utils/builder/Director.h"
+#include "../entity/GameObject.h"
+#include "../component/Sprite.h"
+#include "../component/RigidBody.h"
 
-Scene::Scene(Game *game):
+Scene::Scene(Game *game, SDL_Renderer *renderer):
     mGame       (game),
+    renderer    (renderer),
     mIsUpdating (false)
 {
-    SDL_Log("\tcreate 'Scene'.\n");
+
 }
 
 Scene::~Scene()
 {
-    SDL_Log("\tdelete 'Scene'.\n");
-    Scene::unload();
+    Unload();
 }
 
-/* update scene */
-void Scene::processInput(const Uint8 *keyboard)
+void Scene::Update(float deltaTime)
 {
-    for(GameObject *actor : mActors)
+    for(GameObject *entity : mEntities)
     {
-        actor->processInput(keyboard);
+        entity->Update(deltaTime);
     }
-}
-
-void Scene::update(float dt)
-{
-    for(GameObject *actor : mActors)
-    {
-        actor->update(dt);
-    }
-}
-
-void Scene::draw(SDL_Renderer *renderer)
-{
-    for(DrawComponent *drawable : mDrawables)
-    {
-        if( drawable != nullptr && drawable->isEnabled() )
-        {
-            drawable->draw(renderer);
-        }
-    }
-}
-
-/* attach actor into 'this' scene */
-void Scene::attach(GameObject *actor)
-{
-    mActors.push_back(actor);
-}
-
-/* attach drawable into 'this' scene */
-void Scene::attach(DrawComponent *drawable)
-{
-    mDrawables.push_back(drawable);
 }
 
 /* start new scene */
-void Scene::action()
+void Scene::Start()
 {
-    unload(); // keeping the scene cohesive
-    load();
+    Unload(); // keeping the scene cohesive
+    Load();
 }
 
 /* specific load/unload scene */
-void Scene::unload()
+void Scene::Unload()
 {
-    for(GameObject *actor : mActors)
+    for(GameObject *entity : mEntities)
     {
-        delete actor;
+        delete entity;
     }
 }
 
-void Scene::load()
+void Scene::Load()
 {
-
+    GameObject *mario = new GameObject();
+    mario->AddComponent<Sprite>(renderer, "../assets/sprites/notex.png");
+    mario->AddComponent<RigidBody>(1.0f, 10.0f, true);
+    mEntities.push_back(mario);
 }

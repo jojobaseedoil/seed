@@ -3,50 +3,32 @@
 #include "Builder.h"
 #include "../observer/Observer.h"
 
-/* gameobjects */
-#include "../../../demo/entity/Dummy.h"
-
-/* components */ 
-#include "../../component/drawable/DrawPolygonComponent.h"
-#include "../../component/drawable/Sprite.h"
-
-#include "../../component/rigidbody/RigidBody2DComponent.h"
-#include "../../component/collider/AABB.h"
-
 class Director
 {
 public:
-    Director(Scene *scene) : mScene(scene)
+    Director(Scene *scene) : 
+        mScene(scene)
     {
 
-    }
+    }   
 
     template<typename T>
-    void build(const std::string &layer, float x, float y)
+    T *Build(float x, float y)
     {
         Builder<T> builder;
 
-        T *entity = construct(builder, layer, x, y);
+        T *entity = Construct(builder, x, y);
 
-        mScene->attach(entity);
+        return entity;
     }
 
 private:
 
-    Dummy *construct(Builder<Dummy> &builder, const std::string &layer, float x, float y)
+    GameObject *Construct(Builder<GameObject> &builder, float x, float y)
     {   
-        /* construct entity */
-        builder.reset(mScene, layer);
+        builder.Reset();
 
-        Dummy *entity = builder.getProduct();
-
-        builder.setPosition(Vector2(x,y));
-
-        /* add components */
-        builder.setComponents(mScene,{
-            new Sprite(entity),
-            new RigidBody2DComponent(entity),
-        });
+        GameObject *entity = builder.GetProduct();
 
         return entity;
     }

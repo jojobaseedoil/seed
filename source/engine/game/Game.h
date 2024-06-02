@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 
 #include <SDL2/SDL.h>
 #include <string>
@@ -12,26 +13,26 @@ public:
     ~Game();
 
     /* game basic commands */
-    bool start();
-    void run();
-    void shutdown();
-    void quit();
-    void pause();
-    void resume();
+    bool Start();
+    void Run();
+    void Shutdown();
+    void Quit();
+    void Pause();
+    void Resume();
 
     /* game info */
-    int screenWidth() const;
-    int screenHeight() const;
+    int ScreenWidth() const;
+    int ScreenHeight() const;
 
 private:
     /* main loop */
-    void processInput();
-    void updateGame();
-    void generateOutput();
+    void ProcessInput();
+    void UpdateGame();
+    void GenerateOutput();
 
 protected:
     /* specific for every game */
-    virtual void startScene();
+    virtual void StartScene();
 
     /* 'Game' params */
     SDL_Window *mWindow;
@@ -48,3 +49,5 @@ protected:
     bool mIsRunning;
     bool mIsPaused;
 };
+
+#endif // GAME_H
