@@ -8,7 +8,7 @@
 class Sprite : public Render
 {
 public:
-    Sprite(SDL_Renderer *renderer, const std::string &sprite);
+    Sprite(SDL_Renderer *renderer, const std::string &sprite="../assets/sprites/notex.png");
 
     void Draw() override;
 

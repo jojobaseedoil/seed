@@ -35,6 +35,7 @@ add_executable(
     source/engine/component/Component.h
 
     # engine.component.collider
+    source/engine/component/Collider.cpp
     source/engine/component/Collider.h
 
     source/engine/component/BoxCollider.cpp

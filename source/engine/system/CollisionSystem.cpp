@@ -80,15 +80,27 @@ void CollisionSystem::BroadPhaseCollisionDetection(const std::vector<GameObject*
 
 void CollisionSystem::NarrowPhaseCollisionDetection(GameObject &first, GameObject &second)
 {
-    Collider *self = first.GetComponent<Collider>();
+    Collider *c0 = first.GetComponent<Collider>();
     
-    if(self != nullptr)
+    if(c0 != nullptr)
     {
-        Collider *other = second.GetComponent<Collider>();
+        Collider *c1 = second.GetComponent<Collider>();
         
-        if(self->CheckCollision(*other))
+        if(c0->CheckCollision(*c1))
         {
-            SDL_Log("Success Collision Check!");
+            ResolveCollision(*c0, *c1);
         }
+    }
+}
+
+void CollisionSystem::ResolveCollision(Collider &first, Collider &second)
+{
+    if(second.isTrigger)
+    {
+        SDL_Log("Trigger event!\n");
+    }
+    else
+    {
+        first.ResolveCollision(second);
     }
 }

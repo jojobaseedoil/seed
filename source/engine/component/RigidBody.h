@@ -16,6 +16,10 @@ public:
     void ApplyForce(const Vector2 &force);
     void Update(float deltaTime) override;
 
+    const float GetMass() const;
+    const Vector2 &GetVelocity() const;
+    void SetVelocity(const Vector2 &velocity);
+
 private:
     Vector2 mVelocity;
     Vector2 mAcceleration;

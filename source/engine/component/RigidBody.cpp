@@ -50,13 +50,21 @@ void RigidBody::Update(float deltaTime)
 
     mGameObject->transform.position += mVelocity * deltaTime;
 
-    /*
-        
-        if(mCollider != nullptr)
-        {
-            mCollider->DetectCollision();
-        }
-    */
-
     mAcceleration.Set(0.0f, 0.0f);
+}
+
+
+const float RigidBody::GetMass() const
+{
+    return mMass;
+}
+
+const Vector2 &RigidBody::GetVelocity() const
+{
+    return mVelocity;
+}
+
+void RigidBody::SetVelocity(const Vector2 &velocity)
+{
+    mVelocity = velocity;
 }

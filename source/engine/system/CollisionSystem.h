@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "../utils/IDManager.h"
+#include "../component/Collider.h"
 
 class GameObject;
 
@@ -21,6 +22,8 @@ public:
     bool ShouldLayersCollide(const std::string &first, const std::string &second);
     void BroadPhaseCollisionDetection(const std::vector<GameObject*> &entities);
     void NarrowPhaseCollisionDetection(GameObject &first, GameObject &second);
+
+    void ResolveCollision(Collider &first, Collider &second);
 
 private:
     std::unordered_map<std::string, int> mLayer;

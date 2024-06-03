@@ -6,9 +6,10 @@
 class BoxCollider : public Collider
 {
 public:
-    BoxCollider(float w, float h);
+    BoxCollider(float w, float h, bool isTrigger=false);
 
     bool CheckCollision(Collider &other) const override;
+    void ResolveCollision(Collider &other) override;
 
     void Update(float deltaTime) override;
 

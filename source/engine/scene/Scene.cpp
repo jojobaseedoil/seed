@@ -51,13 +51,13 @@ void Scene::Unload()
 void Scene::Load()
 {
     GameObject *x = new GameObject("Player");
-    x->AddComponent<Sprite>(renderer, "../assets/sprites/notex.png");
+    x->AddComponent<Sprite>(renderer);
     x->AddComponent<RigidBody>(1.0f, 10.0f, true);
     x->AddComponent<BoxCollider>(32,32);
     
     GameObject *y = new GameObject("Enemy");
-    y->AddComponent<Sprite>(renderer, "../assets/sprites/notex.png");
-    y->AddComponent<RigidBody>(1.0f, 10.0f, false);
+    y->AddComponent<Sprite>(renderer);
+    y->AddComponent<RigidBody>(Math::Infinity, 0.0f, false);
     y->AddComponent<BoxCollider>(32,32);
     y->transform.position.y = 512.0f;
 
