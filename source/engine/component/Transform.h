@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 
 #include "Component.h"
 
@@ -11,3 +12,5 @@ public:
     Vector2 rotation = Vector2(0,0);
     Vector2 scale    = Vector2(1,1);
 };
+
+#endif // TRANSFORM_H

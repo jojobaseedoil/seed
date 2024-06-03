@@ -5,6 +5,9 @@
 #include "../entity/GameObject.h"
 #include "../component/Sprite.h"
 #include "../component/RigidBody.h"
+#include "../component/BoxCollider.h"
+
+#include "../system/CollisionSystem.h"
 
 Scene::Scene(Game *game, SDL_Renderer *renderer):
     mGame       (game),
@@ -25,6 +28,8 @@ void Scene::Update(float deltaTime)
     {
         entity->Update(deltaTime);
     }
+
+    mCollisionSys.BroadPhaseCollisionDetection(mEntities);
 }
 
 /* start new scene */
@@ -45,8 +50,19 @@ void Scene::Unload()
 
 void Scene::Load()
 {
-    GameObject *mario = new GameObject();
-    mario->AddComponent<Sprite>(renderer, "../assets/sprites/notex.png");
-    mario->AddComponent<RigidBody>(1.0f, 10.0f, true);
-    mEntities.push_back(mario);
+    GameObject *x = new GameObject("Player");
+    x->AddComponent<Sprite>(renderer, "../assets/sprites/notex.png");
+    x->AddComponent<RigidBody>(1.0f, 10.0f, true);
+    x->AddComponent<BoxCollider>(32,32);
+    
+    GameObject *y = new GameObject("Enemy");
+    y->AddComponent<Sprite>(renderer, "../assets/sprites/notex.png");
+    y->AddComponent<RigidBody>(1.0f, 10.0f, false);
+    y->AddComponent<BoxCollider>(32,32);
+    y->transform.position.y = 512.0f;
+
+    mCollisionSys.Insert("Player", {"Enemy"});
+
+    mEntities.push_back(x);
+    mEntities.push_back(y);
 }

@@ -1,7 +1,8 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
 
-#include <vector>
 #include <SDL2/SDL_render.h>
+#include "../system/CollisionSystem.h"
 
 class Game;
 class GameObject;
@@ -28,8 +29,12 @@ protected:
     /* 'Scene' params */
     Game *mGame;
 
+    CollisionSystem mCollisionSys;
+
     std::vector<GameObject*> mEntities;
     std::vector<GameObject*> mPendingEntities;
 
     bool mIsUpdating;
 };
+
+#endif // SCENE_H

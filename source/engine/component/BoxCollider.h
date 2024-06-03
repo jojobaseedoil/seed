@@ -6,7 +6,7 @@
 class BoxCollider : public Collider
 {
 public:
-    BoxCollider(float x, float y, float w, float h);
+    BoxCollider(float w, float h);
 
     bool CheckCollision(Collider &other) const override;
 

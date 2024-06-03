@@ -135,7 +135,7 @@ void Game::UpdateGame()
 
     mTicksCounter = SDL_GetTicks();
 
-    SDL_Log("Delta Time : %f", deltaTime);
+    // SDL_Log("Delta Time : %f", deltaTime);
 
     if(mScene != nullptr)
     {

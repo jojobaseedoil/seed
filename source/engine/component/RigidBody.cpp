@@ -50,5 +50,13 @@ void RigidBody::Update(float deltaTime)
 
     mGameObject->transform.position += mVelocity * deltaTime;
 
+    /*
+        
+        if(mCollider != nullptr)
+        {
+            mCollider->DetectCollision();
+        }
+    */
+
     mAcceleration.Set(0.0f, 0.0f);
 }

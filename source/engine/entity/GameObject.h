@@ -2,6 +2,7 @@
 #define GAMEOBJECT_H
 
 #include <vector>
+#include <string>
 #include <SDL2/SDL_stdinc.h>
 
 #include "../component/Transform.h"
@@ -12,7 +13,7 @@ class Component;
 class GameObject
 {
 public:
-    GameObject();
+    GameObject(const std::string &layer="Instances");
     virtual ~GameObject();
 
     void Update(float deltaTime);
@@ -26,7 +27,8 @@ public:
     static void Destroy(GameObject *entity);
 
     Transform transform;
-    
+    const std::string layer;
+
 protected:    
     Scene *mScene;
 

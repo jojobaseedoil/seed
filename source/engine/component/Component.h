@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
 #include <SDL2/SDL_stdinc.h>
 
@@ -16,3 +17,5 @@ public:
 protected:
     GameObject *mGameObject = nullptr;
 };
+
+#endif // COMPONENT_H

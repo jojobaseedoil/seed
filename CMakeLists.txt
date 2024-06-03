@@ -51,9 +51,25 @@ add_executable(
     source/engine/component/RigidBody.cpp
     source/engine/component/RigidBody.h
 
+    # engine.component.monobehaviour
+    source/engine/component/MonoBehaviour.cpp
+    source/engine/component/MonoBehaviour.h
+
+    # engine.system.collisionsystem
+    source/engine/system/CollisionSystem.cpp
+    source/engine/system/CollisionSystem.h
+    
     # engine.utils
     source/engine/utils/Math.cpp
     source/engine/utils/Math.h
+
+    # engine.utils.idmanager
+    source/engine/utils/IDManager.cpp
+    source/engine/utils/IDManager.h
+
+    # engine.utils.eventmanager
+    source/engine/utils/EventManager.cpp
+    source/engine/utils/EventManager.h
 
     # engine.utils.builder
     source/engine/utils/builder/Builder.h
