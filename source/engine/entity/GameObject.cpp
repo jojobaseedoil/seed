@@ -2,9 +2,12 @@
 
 #include <SDL2/SDL_log.h>
 
-GameObject::GameObject(const std::string &layer):
-    mScene    (nullptr),
-    layer     (layer)
+int GameObject::sNextId = 0;
+
+GameObject::GameObject(const Layer &layer):
+    mScene (nullptr),
+    layer  (layer),
+    tag    (sNextId++)  
 {
     transform = *AddComponent<Transform>();
 }

@@ -65,16 +65,16 @@ add_executable(
     source/engine/utils/Math.h
 
     # engine.utils.idmanager
-    source/engine/utils/IDManager.cpp
-    source/engine/utils/IDManager.h
+    # source/engine/utils/IDManager.cpp
+    # source/engine/utils/IDManager.h
 
     # engine.utils.eventmanager
-    source/engine/utils/EventManager.cpp
-    source/engine/utils/EventManager.h
+    # source/engine/utils/EventManager.cpp
+    # source/engine/utils/EventManager.h
 
     # engine.utils.builder
-    source/engine/utils/builder/Builder.h
-    source/engine/utils/builder/Director.h
+    # source/engine/utils/builder/Builder.h
+    # source/engine/utils/builder/Director.h
 
     # engine.utils.observer
     # source/engine/utils/observer/Observer.cpp

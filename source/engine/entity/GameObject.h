@@ -13,7 +13,7 @@ class Component;
 class GameObject
 {
 public:
-    GameObject(const std::string &layer="Instances");
+    GameObject(const Layer &layer=Layer::Instances);
     virtual ~GameObject();
 
     void Update(float deltaTime);
@@ -26,13 +26,19 @@ public:
 
     static void Destroy(GameObject *entity);
 
+
+public:
     Transform transform;
-    const std::string layer;
+    const Layer layer;
+    const int tag;
 
 protected:    
     Scene *mScene;
 
     std::vector<Component*> mComponents;
+
+private:
+    static int sNextId;
 };
 
 template <typename T, typename... Args>

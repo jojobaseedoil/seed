@@ -20,12 +20,14 @@ public:
 
     void Start();
 
-    SDL_Renderer *renderer;
-
 protected:
     virtual void Unload();
     virtual void Load();
 
+public:
+    SDL_Renderer *renderer;
+
+protected:
     /* 'Scene' params */
     Game *mGame;
 

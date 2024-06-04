@@ -1,8 +1,8 @@
 #include "engine/game/Game.h"
 
-#define SCREEN_WIDTH  800
-#define SCREEN_HEIGHT 600
-#define TITLE         "seed - ©jojobaseedoil, 2024"
+const unsigned int SCREEN_WIDTH  = 800;
+const unsigned int SCREEN_HEIGHT = 600;
+const std::string  TITLE         = "seed - ©jojobaseedoil, 2024";
 
 int main(int argc, char **argv)
 {
@@ -13,6 +13,4 @@ int main(int argc, char **argv)
         game.Run();
     }
     game.Shutdown();
-
-    return 0;
 }

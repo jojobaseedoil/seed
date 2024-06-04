@@ -12,7 +12,9 @@ public:
     virtual bool CheckCollision(Collider &other) const = 0;
     virtual void ResolveCollision(Collider &other) = 0;
 
+public:
     const bool isTrigger;
+    bool isInside;
 };
 
 #endif // COLLIDER_H

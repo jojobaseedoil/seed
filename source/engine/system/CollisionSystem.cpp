@@ -1,106 +1,149 @@
 #include "CollisionSystem.h"
 
 #include "../entity/GameObject.h"
-#include "../component/Collider.h"
+
+#include "../component/MonoBehaviour.h"
 
 #include <SDL2/SDL_log.h>
 
 CollisionSystem::CollisionSystem()
 {
-    for(int i=0; i<NUM_LAYERS*NUM_LAYERS; i++)
+    Reset();
+}
+
+void CollisionSystem::InsertLayer(const Layer &layer, const std::vector<Layer> &collideWith)
+{
+    for(const Layer &other : collideWith)
+    {
+        mCollisionMatrix[layer * NUM_LAYERS_2D + other] = true;
+    }
+}
+
+void CollisionSystem::RemoveLayer(const Layer &layer)
+{
+    for(int j=0; j<NUM_LAYERS_2D; j++)
+    {
+        mCollisionMatrix[ layer * NUM_LAYERS_2D + j ] = false;
+        mCollisionMatrix[ j * NUM_LAYERS_2D + layer ] = false;
+    }
+}
+
+void CollisionSystem::Reset()
+{
+    for(int i=0; i<NUM_LAYERS_1D; i++)
     {
         mCollisionMatrix[i] = false;
     }
+    mScripts.clear();
 }
 
-void CollisionSystem::Insert(const std::string &layer, const std::vector<std::string> &collideWith)
+void CollisionSystem::InsertScript(int tag, const std::vector<MonoBehaviour*> &scripts)
 {
-    if(mLayer.find(layer) == mLayer.end())
+    mScripts[tag] = scripts;
+}
+
+void CollisionSystem::RemoveScript(int tag)
+{
+    if(mScripts.find(tag) != mScripts.end())
     {
-        if(mIdManager.HasNext())
-        {
-            mLayer[layer] = mIdManager.Next();
-
-            for(const std::string &other : collideWith)
-            {
-                Insert(other);
-
-                if(mLayer.find(other) != mLayer.end())
-                {
-                    mCollisionMatrix[ mLayer[layer] * NUM_LAYERS + mLayer[other] ] = true;
-                }
-            }
-        }
+        mScripts.erase(tag);
     }
 }
 
-void CollisionSystem::Remove(const std::string &layer)
+bool CollisionSystem::ShouldLayersCollide(const Layer &src, const Layer &tar)
 {
-    if(mLayer.find(layer) != mLayer.end())
-    {
-        int id = mLayer[layer];
-        mIdManager.Refund(id);
-
-        for(int j=0; j<NUM_LAYERS; j++)
-        {
-            mCollisionMatrix[ id * NUM_LAYERS + j ] = false;
-            mCollisionMatrix[ j  * NUM_LAYERS + id] = false;
-        }
-
-        mLayer.erase(layer);
-    }
-}
-
-bool CollisionSystem::ShouldLayersCollide(const std::string &first, const std::string &second)
-{
-    if(mLayer.find(first) == mLayer.end() || mLayer.find(second) == mLayer.end())
-    {
-        return false;
-    }
-
-    return mCollisionMatrix[ mLayer[first] * NUM_LAYERS + mLayer[second] ];
+    return mCollisionMatrix[ src * NUM_LAYERS_2D + tar ];
 }
 
 void CollisionSystem::BroadPhaseCollisionDetection(const std::vector<GameObject*> &entities)
 {
-    for(size_t i=0; i<entities.size(); i++)
-    {
-        for(size_t j=i+1; j<entities.size(); j++)
-        {
-            GameObject *first  = entities[i];
-            GameObject *second = entities[j];
+    size_t numEntities = entities.size();
 
-            if(ShouldLayersCollide(first->layer, second->layer))
+    for(size_t i=0; i<numEntities; i++)
+    {
+        for(size_t j=i+1; j<numEntities; j++)
+        {
+            GameObject *src = entities[i];
+            GameObject *tar = entities[j];
+
+            if(ShouldLayersCollide(src->layer, tar->layer))
             {
-                NarrowPhaseCollisionDetection(*first, *second);
+                NarrowPhaseCollisionDetection(*src, *tar);
             }
         }
     }
 }
 
-void CollisionSystem::NarrowPhaseCollisionDetection(GameObject &first, GameObject &second)
+void CollisionSystem::NarrowPhaseCollisionDetection(GameObject &src, GameObject &tar)
 {
-    Collider *c0 = first.GetComponent<Collider>();
-    
-    if(c0 != nullptr)
+    Collider *c0 = src.GetComponent<Collider>();
+    Collider *c1 = tar.GetComponent<Collider>();
+
+    if(c0 && c1 && c0->CheckCollision(*c1))
     {
-        Collider *c1 = second.GetComponent<Collider>();
-        
-        if(c0->CheckCollision(*c1))
-        {
-            ResolveCollision(*c0, *c1);
-        }
+        ResolveCollision(*c0, *c1);
+    }
+    else if(c1->isInside)
+    { 
+        TriggerExit(*c0, *c1);
+
+        c1->isInside = false;
+    } 
+}
+
+/* WARNING: if tag not in mScripts it will create 
+a new entry { tag : [] } */
+void CollisionSystem::TriggerEnter(Collider &src, Collider &tar)
+{
+    int tag = src.GetTag();
+
+    for(MonoBehaviour *scr : mScripts[tag])
+    {
+        scr->OnTriggerEnter(tar);
     }
 }
 
-void CollisionSystem::ResolveCollision(Collider &first, Collider &second)
+/* WARNING: if tag not in mScripts it will create 
+a new entry { tag : [] } */
+void CollisionSystem::TriggerStay(Collider &src, Collider &tar)
 {
-    if(second.isTrigger)
+    int tag = src.GetTag();
+
+    for(MonoBehaviour *scr : mScripts[tag])
     {
-        SDL_Log("Trigger event!\n");
+        scr->OnTriggerStay(tar);
+    }
+}
+
+/* WARNING: if tag not in mScripts it will create 
+a new entry { tag : [] } */
+void CollisionSystem::TriggerExit(Collider &src, Collider &tar)
+{
+    int tag = src.GetTag();
+ 
+    for(MonoBehaviour *scr : mScripts[tag])
+    {
+        scr->OnTriggerStay(tar);
+    }
+}
+
+void CollisionSystem::ResolveCollision(Collider &src, Collider &tar)
+{
+    if(tar.isTrigger)
+    {
+        if(tar.isInside)
+        {
+            TriggerStay(src, tar);
+        }
+        else
+        {
+            TriggerEnter(src, tar);
+
+            tar.isInside = true;
+        }
     }
     else
     {
-        first.ResolveCollision(second);
+        src.ResolveCollision(tar);
     }
 }

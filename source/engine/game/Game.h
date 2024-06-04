@@ -34,6 +34,7 @@ protected:
     /* specific for every game */
     virtual void StartScene();
 
+protected:
     /* 'Game' params */
     SDL_Window *mWindow;
     SDL_Renderer *mRenderer;
