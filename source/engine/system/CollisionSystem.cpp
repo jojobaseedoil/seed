@@ -123,7 +123,7 @@ void CollisionSystem::TriggerExit(Collider &src, Collider &tar)
  
     for(MonoBehaviour *scr : mScripts[tag])
     {
-        scr->OnTriggerStay(tar);
+        scr->OnTriggerExit(tar);
     }
 }
 
