@@ -59,7 +59,19 @@ add_executable(
     # engine.system.collisionsystem
     source/engine/system/CollisionSystem.cpp
     source/engine/system/CollisionSystem.h
-    
+
+    # engine.system.input.inputsystem
+    source/engine/system/input/InputSystem.cpp
+    source/engine/system/input/InputSystem.h
+
+    # engine.system.input.inputdevice
+    source/engine/system/input/InputDevice.cpp
+    source/engine/system/input/InputDevice.h
+
+    # engine.system.input.keyboard
+    source/engine/system/input/Keyboard.cpp
+    source/engine/system/input/Keyboard.h
+
     # engine.utils
     source/engine/utils/Math.cpp
     source/engine/utils/Math.h

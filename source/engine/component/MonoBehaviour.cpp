@@ -3,14 +3,9 @@
 #include "../entity/GameObject.h"
 #include <SDL2/SDL_log.h>
 
-MonoBehaviour::MonoBehaviour()
-{
-    OnStart();
-}
-
 MonoBehaviour::~MonoBehaviour()
 {
-    OnDestroy();
+
 }
 
 void MonoBehaviour::OnStart()

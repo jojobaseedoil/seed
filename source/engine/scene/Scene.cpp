@@ -7,7 +7,8 @@
 #include "../component/Sprite.h"
 #include "../component/RigidBody.h"
 #include "../component/BoxCollider.h"
-#include "../component/MonoBehaviour.h"
+// #include "../component/MonoBehaviour.h"
+#include "../component/DebugBehaviour.h"
 
 #include "../system/CollisionSystem.h"
 
@@ -57,17 +58,17 @@ void Scene::Load()
 
     /* PREFAB X */
     x->AddComponent<Sprite>(renderer);
-    x->AddComponent<RigidBody>(1.0f, 10.0f, true);
+    x->AddComponent<RigidBody>(1.0f, 10.0f, false);
     x->AddComponent<BoxCollider>(32,32);
 
     std::vector<MonoBehaviour*> xScr = {
-        x->AddComponent<MonoBehaviour>()
+        x->AddComponent<DebugBehaviour>()
     };
 
     /* PREFAB Y */
     y->AddComponent<Sprite>(renderer);
-    y->AddComponent<RigidBody>(Math::Infinity, 0.0f, false);
-    y->AddComponent<BoxCollider>(32,32,true);
+    y->AddComponent<RigidBody>(10.0f, 0.0f, false);
+    y->AddComponent<BoxCollider>(32,32);
     y->transform.position.y = 256.0f;
 
     std::vector<MonoBehaviour*> yScr = {

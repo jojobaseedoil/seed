@@ -7,7 +7,7 @@ int GameObject::sNextId = 0;
 GameObject::GameObject(const Layer &layer):
     mScene (nullptr),
     layer  (layer),
-    tag    (sNextId++)  
+    tag    (sNextId++)
 {
     transform = *AddComponent<Transform>();
 }

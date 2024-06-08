@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "../system/input/InputSystem.h"
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -23,6 +24,8 @@ public:
     /* game info */
     int ScreenWidth() const;
     int ScreenHeight() const;
+
+    InputSystem mInputSys;
 
 private:
     /* main loop */
@@ -49,6 +52,8 @@ protected:
 
     bool mIsRunning;
     bool mIsPaused;
+
+    InputSystem *sInputSystem;
 };
 
 #endif // GAME_H

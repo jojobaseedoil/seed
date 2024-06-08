@@ -13,7 +13,8 @@ Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mHeight       (screenHeight),
     mTicksCounter (0.0f),
     mIsRunning    (true),
-    mIsPaused     (false)
+    mIsPaused     (false),
+    sInputSystem  (InputSystem::GetInstance())
 {
 
 }
@@ -111,13 +112,22 @@ int Game::ScreenHeight() const
 void Game::ProcessInput()
 {
     SDL_Event event;
-    while (SDL_PollEvent(&event))
+    while(SDL_PollEvent(&event))
     {
-        switch (event.type)
+        if(&event == nullptr)
         {
-            case SDL_QUIT:
-                Quit();
-                break;
+            SDL_Log("aqui");
+        }
+
+        switch(event.type)
+        {
+        case SDL_QUIT:
+            Quit();
+            break;  
+        case SDL_KEYDOWN:
+        case SDL_KEYUP:
+            sInputSystem->HandleKeyboard(event);
+            break;
         }
     }
 }

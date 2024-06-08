@@ -6,6 +6,7 @@
 #include <SDL2/SDL_stdinc.h>
 
 #include "../component/Transform.h"
+#include "../component/MonoBehaviour.h"
 
 class Scene;
 class Component;
@@ -26,15 +27,13 @@ public:
 
     static void Destroy(GameObject *entity);
 
-
 public:
     Transform transform;
     const Layer layer;
     const int tag;
 
-protected:    
+protected:
     Scene *mScene;
-
     std::vector<Component*> mComponents;
 
 private:
@@ -47,6 +46,14 @@ T *GameObject::AddComponent(Args&&... args)
     T* component = new T(std::forward<Args>(args)...);
     component->mGameObject = this;
     mComponents.emplace_back(component);
+
+    /* case is a monobehaviour, init script */
+    MonoBehaviour* mb = dynamic_cast<MonoBehaviour*>(component);
+    if(mb != nullptr)
+    {
+        mb->OnStart();
+    }
+
     return component;
 }
 

@@ -6,6 +6,7 @@
 
 class Game;
 class GameObject;
+class InputSystem;
 
 class Scene
 {
