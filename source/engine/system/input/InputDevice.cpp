@@ -3,7 +3,7 @@
 #include "InputSystem.h"
 
 InputDevice::InputDevice(Device tag) : 
-    tag (tag),
+    tag          (tag),
     sInputSystem (InputSystem::GetInstance())
 {
     sInputSystem->AddDevice(this);

@@ -73,4 +73,9 @@ T *GameObject::GetComponent()
     return nullptr;
 }
 
+template <typename Base, typename Derived>
+bool IsInstanceOf(const Derived* ptr) {
+    return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
 #endif // GAMEOBJECT_H

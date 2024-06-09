@@ -114,11 +114,6 @@ void Game::ProcessInput()
     SDL_Event event;
     while(SDL_PollEvent(&event))
     {
-        if(&event == nullptr)
-        {
-            SDL_Log("aqui");
-        }
-
         switch(event.type)
         {
         case SDL_QUIT:
@@ -145,7 +140,7 @@ void Game::UpdateGame()
 
     mTicksCounter = SDL_GetTicks();
 
-    // SDL_Log("Delta Time : %f", deltaTime);
+    SDL_Log("Delta Time : %f", deltaTime);
 
     if(mScene != nullptr)
     {

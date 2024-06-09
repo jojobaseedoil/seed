@@ -67,8 +67,10 @@ void Scene::Load()
 
     /* PREFAB Y */
     y->AddComponent<Sprite>(renderer);
-    y->AddComponent<RigidBody>(10.0f, 0.0f, false);
+    y->AddComponent<RigidBody>(10, 0.0f, false);
     y->AddComponent<BoxCollider>(32,32);
+    
+    y->transform.position.x = 256.0f;
     y->transform.position.y = 256.0f;
 
     std::vector<MonoBehaviour*> yScr = {
