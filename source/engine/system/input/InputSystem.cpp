@@ -2,16 +2,16 @@
 
 #include <SDL2/SDL_log.h>
 
-InputSystem *InputSystem::sInputSystem = nullptr;
+InputSystem *InputSystem::instance = nullptr;
 
 InputSystem *InputSystem::GetInstance() 
 {
-    if(sInputSystem == nullptr) 
+    if(instance == nullptr) 
     {
-        sInputSystem = new InputSystem;
+        instance = new InputSystem;
     }
 
-    return sInputSystem;
+    return instance;
 }
 
 void InputSystem::AddDevice(InputDevice *device)

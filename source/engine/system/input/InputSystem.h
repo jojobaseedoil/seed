@@ -8,7 +8,8 @@ class Game;
 class InputSystem
 {
 public:
-    InputSystem() = default;
+    static InputSystem* GetInstance();
+
     /* Delete copy constructor and assignment operator */ 
     InputSystem(const InputSystem&) = delete;
     InputSystem& operator=(const InputSystem&) = delete;
@@ -17,10 +18,13 @@ public:
     void RemoveDevice(InputDevice *device);
     void HandleKeyboard(SDL_Event &event);
     void HandleMouse(SDL_Event &event);
-
-    static InputSystem* GetInstance();
+    
 private:
-    static InputSystem *sInputSystem;
+    InputSystem() = default;
+
+private:
+
+    static InputSystem *instance;
     std::unordered_map<Device, std::vector<InputDevice*>> mDevices;
 };
 

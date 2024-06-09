@@ -6,6 +6,18 @@
 
 #include <SDL2/SDL_log.h>
 
+CollisionSystem *CollisionSystem::instance = nullptr;
+
+CollisionSystem *CollisionSystem::GetInstance() 
+{
+    if(instance == nullptr)
+    {
+        instance = new CollisionSystem;
+    }
+
+    return instance;
+}
+
 CollisionSystem::CollisionSystem()
 {
     Reset();

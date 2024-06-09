@@ -10,12 +10,11 @@
 // #include "../component/MonoBehaviour.h"
 #include "../component/DebugBehaviour.h"
 
-#include "../system/CollisionSystem.h"
-
 Scene::Scene(Game *game, SDL_Renderer *renderer):
-    mGame       (game),
-    renderer    (renderer),
-    mIsUpdating (false)
+    mGame            (game),
+    renderer         (renderer),
+    mIsUpdating      (false),
+    sCollisionSystem (CollisionSystem::GetInstance())
 {
 
 }
@@ -32,7 +31,7 @@ void Scene::Update(float deltaTime)
         entity->Update(deltaTime);
     }
 
-    mCollisionSys.BroadPhaseCollisionDetection(mEntities);
+    sCollisionSystem->BroadPhaseCollisionDetection(mEntities);
 }
 
 /* start new scene */
@@ -78,11 +77,11 @@ void Scene::Load()
     };
 
     /* ADD MONOBEHAVIOUR TO COLLISION SYSTEM */
-    mCollisionSys.InsertScript(x->tag, xScr);
-    mCollisionSys.InsertScript(y->tag, yScr);
+    sCollisionSystem->InsertScript(x->tag, xScr);
+    sCollisionSystem->InsertScript(y->tag, yScr);
 
     /* ADD INTO COLLISION SYSTEM */
-    mCollisionSys.InsertLayer(Instances, {Instances});
+    sCollisionSystem->InsertLayer(Instances, {Instances});
 
     /* ADD INTO GAME */
     mEntities.push_back(x);

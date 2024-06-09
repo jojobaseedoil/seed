@@ -15,7 +15,11 @@ const int NUM_LAYERS_1D = 32*32;
 class CollisionSystem
 {
 public:
-    CollisionSystem();
+    static CollisionSystem *GetInstance();
+
+    /* Delete copy constructor and assignment operator */
+    CollisionSystem(const CollisionSystem&) = delete;
+    CollisionSystem &operator=(const CollisionSystem&) = delete;
 
     void InsertLayer(const Layer &layer, const std::vector<Layer> &collideWith={});
     void RemoveLayer(const Layer &layer);
@@ -27,6 +31,8 @@ public:
     void BroadPhaseCollisionDetection(const std::vector<GameObject*> &entities);
 
 private:
+    CollisionSystem();
+
     void NarrowPhaseCollisionDetection(GameObject &src, GameObject &tar);
     void ResolveCollision(Collider &src, Collider &tar);
     void TriggerEnter(Collider &src, Collider &tar);
@@ -35,6 +41,8 @@ private:
     void Reset();
 
 private:
+    static CollisionSystem *instance;
+
     bool mCollisionMatrix[NUM_LAYERS_1D]; // 32 layers max.
     std::unordered_map<int, std::vector<MonoBehaviour*>> mScripts;
 };

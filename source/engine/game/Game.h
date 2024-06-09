@@ -25,8 +25,6 @@ public:
     int ScreenWidth() const;
     int ScreenHeight() const;
 
-    InputSystem mInputSys;
-
 private:
     /* main loop */
     void ProcessInput();

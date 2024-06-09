@@ -32,7 +32,7 @@ protected:
     /* 'Scene' params */
     Game *mGame;
 
-    CollisionSystem mCollisionSys;
+    CollisionSystem *sCollisionSystem;
 
     std::vector<GameObject*> mEntities;
     std::vector<GameObject*> mPendingEntities;
