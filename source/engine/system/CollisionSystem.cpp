@@ -49,12 +49,12 @@ void CollisionSystem::Reset()
     mScripts.clear();
 }
 
-void CollisionSystem::InsertScript(int tag, const std::vector<MonoBehaviour*> &scripts)
+void CollisionSystem::InsertScript(int tag, MonoBehaviour *scr)
 {
-    mScripts[tag] = scripts;
+    mScripts[tag].push_back(scr);
 }
 
-void CollisionSystem::RemoveScript(int tag)
+void CollisionSystem::RemoveScripts(int tag)
 {
     if(mScripts.find(tag) != mScripts.end())
     {

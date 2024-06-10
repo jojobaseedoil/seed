@@ -6,7 +6,6 @@
 #include <SDL2/SDL_log.h>
 
 #include "../system/input/Keyboard.h"
-#include "../game/Game.h"
 #include "../entity/GameObject.h"
 
 class DebugBehaviour : public MonoBehaviour
@@ -17,7 +16,7 @@ public:
     void OnStart() override
     {
         mRigidbody = mGameObject->GetComponent<RigidBody>();
-        mKeyboard.Bind(SDL_SCANCODE_SPACE, [this](){ Attack(); });
+        mKeyboard.Bind(SDL_SCANCODE_SPACE, [this](){ DestroySelf(); });
     }
 
     void Update(float deltaTime) override
@@ -25,9 +24,9 @@ public:
         Move();
     }
 
-    void Attack()
+    void DestroySelf()
     {
-        SDL_Log("Attacking...");
+        mGameObject->SetState(GameObject::State::Destroy);
     }
 
     void Move()

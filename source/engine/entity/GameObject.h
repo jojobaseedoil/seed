@@ -7,13 +7,22 @@
 
 #include "../component/Transform.h"
 #include "../component/MonoBehaviour.h"
+#include "../system/CollisionSystem.h"
 
 class Scene;
 class Component;
 
+
 class GameObject
 {
 public:
+    friend class Scene;
+
+    enum class State
+    {
+        Active, Paused, Pending, Destroy
+    };
+
     GameObject(const Layer &layer=Layer::Instances);
     virtual ~GameObject();
 
@@ -27,13 +36,19 @@ public:
 
     static void Destroy(GameObject *entity);
 
+    /* GameObject state */
+    const State &GetState() const;
+    void SetState(const State &newState);
+
 public:
+
     Transform transform;
     const Layer layer;
     const int tag;
 
 protected:
     Scene *mScene;
+    State mState;
     std::vector<Component*> mComponents;
 
 private:
@@ -51,6 +66,13 @@ T *GameObject::AddComponent(Args&&... args)
     MonoBehaviour* mb = dynamic_cast<MonoBehaviour*>(component);
     if(mb != nullptr)
     {
+        CollisionSystem *csys = CollisionSystem::GetInstance();
+
+        if(csys != nullptr)
+        {
+            csys->InsertScript(tag, mb);
+        }
+
         mb->OnStart();
     }
 

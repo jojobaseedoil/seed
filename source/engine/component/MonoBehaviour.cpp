@@ -3,11 +3,6 @@
 #include "../entity/GameObject.h"
 #include <SDL2/SDL_log.h>
 
-MonoBehaviour::~MonoBehaviour()
-{
-
-}
-
 void MonoBehaviour::OnStart()
 {
 

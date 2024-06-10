@@ -6,8 +6,6 @@
 class MonoBehaviour : public Component
 {
 public:
-    virtual ~MonoBehaviour();
-
     virtual void OnStart();
     virtual void OnUpdate();
     virtual void OnTriggerEnter(Collider &other);

@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <SDL2/SDL_render.h>
+#include <queue>
 #include "../system/CollisionSystem.h"
 
 class Game;
@@ -15,6 +16,9 @@ public:
     virtual ~Scene();
     
     void Update(float deltaTime);
+
+    void AddEntity(GameObject *entity);
+    void RemoveEntity(GameObject *entity);
 
     template <typename T, typename... Args>
     T* AddPrefab(Args&&... args);
@@ -35,9 +39,7 @@ protected:
     CollisionSystem *sCollisionSystem;
 
     std::vector<GameObject*> mEntities;
-    std::vector<GameObject*> mPendingEntities;
-
-    bool mIsUpdating;
+    std::queue<GameObject*> mPendingEntities;
 };
 
 #endif // SCENE_H

@@ -24,8 +24,8 @@ public:
     void InsertLayer(const Layer &layer, const std::vector<Layer> &collideWith={});
     void RemoveLayer(const Layer &layer);
 
-    void InsertScript(int tag, const std::vector<MonoBehaviour*> &scripts);
-    void RemoveScript(int tag);
+    void InsertScript(int tag, MonoBehaviour* scr);
+    void RemoveScripts(int tag);
 
     bool ShouldLayersCollide(const Layer &src, const Layer &tar);
     void BroadPhaseCollisionDetection(const std::vector<GameObject*> &entities);

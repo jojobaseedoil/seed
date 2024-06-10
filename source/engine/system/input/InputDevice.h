@@ -20,7 +20,7 @@ public:
     using InputEvent = std::function<void()>;
 
     InputDevice(Device tag);
-    virtual ~InputDevice() = default;
+    virtual ~InputDevice();
 
     virtual void HandleInput(SDL_Event &event) = 0;
     void Notify(std::unordered_map<int, InputEvent> &binding, int key);

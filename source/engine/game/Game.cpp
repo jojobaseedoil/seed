@@ -75,7 +75,7 @@ void Game::Run()
 }
 
 void Game::Shutdown()
-{
+{    
     IMG_Quit();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
@@ -118,7 +118,7 @@ void Game::ProcessInput()
         {
         case SDL_QUIT:
             Quit();
-            break;  
+            break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
             sInputSystem->HandleKeyboard(event);
@@ -140,7 +140,7 @@ void Game::UpdateGame()
 
     mTicksCounter = SDL_GetTicks();
 
-    SDL_Log("Delta Time : %f", deltaTime);
+    // SDL_Log("Delta Time : %f", deltaTime);
 
     if(mScene != nullptr)
     {
