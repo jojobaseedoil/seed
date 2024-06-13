@@ -12,7 +12,6 @@
 class Scene;
 class Component;
 
-
 class GameObject
 {
 public:
@@ -34,11 +33,11 @@ public:
     template<typename T>
     T *GetComponent();
 
-    static void Destroy(GameObject *entity);
-
     /* GameObject state */
     const State &GetState() const;
-    void SetState(const State &newState);
+    static void Destroy(GameObject *entity);
+    static void Activate(GameObject *entity);
+    static void Pause(GameObject *entity);
 
 public:
 

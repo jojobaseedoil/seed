@@ -29,6 +29,10 @@ protected:
     virtual void Unload();
     virtual void Load();
 
+private:
+    void InsertRoutine();
+    void DestroyRoutine();
+
 public:
     SDL_Renderer *renderer;
 
@@ -39,7 +43,8 @@ protected:
     CollisionSystem *sCollisionSystem;
 
     std::vector<GameObject*> mEntities;
-    std::queue<GameObject*> mPendingEntities;
+    std::queue<GameObject*> mDestroy;
+    std::queue<GameObject*> mPending;
 };
 
 #endif // SCENE_H

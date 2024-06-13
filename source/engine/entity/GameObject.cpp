@@ -42,18 +42,23 @@ void GameObject::Update(float deltaTime)
     }
 }
 
-void GameObject::Destroy(GameObject *entity)
-{
-    delete entity;
-}
-
 /* GameObject state */
 const GameObject::State &GameObject::GetState() const
 {
     return mState;
 }
 
-void GameObject::SetState(const State &newState)
-{    
-    mState = newState;
+void GameObject::Destroy(GameObject *entity)
+{
+    entity->mState = State::Destroy;
+}
+
+void GameObject::Activate(GameObject *entity)
+{
+    entity->mState = State::Active;
+}
+
+void GameObject::Pause(GameObject *entity)
+{
+    entity->mState = State::Paused;
 }

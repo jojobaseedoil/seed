@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL_log.h>
 
+#include "../system/sound/AudioSystem.h"
 #include "../system/input/Keyboard.h"
 #include "../entity/GameObject.h"
 
@@ -15,18 +16,20 @@ public:
 
     void OnStart() override
     {
+        mAudio = new AudioSystem;
         mRigidbody = mGameObject->GetComponent<RigidBody>();
         mKeyboard.Bind(SDL_SCANCODE_SPACE, [this](){ DestroySelf(); });
     }
 
     void Update(float deltaTime) override
     {
+        mAudio->Update(deltaTime);
         Move();
     }
 
     void DestroySelf()
     {
-        mGameObject->SetState(GameObject::State::Destroy);
+        GameObject::Destroy(mGameObject);
     }
 
     void Move()
@@ -63,9 +66,22 @@ public:
         return Vector2(x,y);
     }
 
+    void OnTriggerEnter(Collider &other) override
+    {
+        SDL_Log("Enter");
+        mAudio->PlaySound("enter.wav");
+    }
+
+    void OnTriggerExit(Collider &other) override
+    {
+        SDL_Log("Exit");
+        mAudio->PlaySound("exit.wav");
+    }
+
 private:
     RigidBody *mRigidbody;
     Keyboard mKeyboard;
+    AudioSystem *mAudio;
 };
 
 #endif // DEBUG_BEHAVIOUR_H

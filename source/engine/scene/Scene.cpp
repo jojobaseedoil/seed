@@ -28,49 +28,35 @@ void Scene::Update(float deltaTime)
     /* Update entities */
     for(GameObject *entity : mEntities)
     {
-        if(entity->GetState() == GameObject::State::Active)
+        switch ( entity->GetState() )
         {
+        case GameObject::State::Active:
             entity->Update(deltaTime);
+            break;
+
+        case GameObject::State::Destroy:
+            mDestroy.push(entity);
+            break;
+        
+        default:
+            break;
         }
     }
+
     /* Check for collisions */
     sCollisionSystem->BroadPhaseCollisionDetection(mEntities);
 
     /* insert new entities */
-    while( !mPendingEntities.empty() )
-    {
-        GameObject *entity = mPendingEntities.front();
-        mPendingEntities.pop();
-
-        if(entity != nullptr)
-        {
-            entity->SetState(GameObject::State::Active);
-            mEntities.push_back(entity);
-        }
-    }
-
-    /* find unused entities */
-    std::vector<GameObject*> toDestroy;
-
-    for(GameObject *entity : mEntities)
-    {
-        if(entity->GetState() == GameObject::State::Destroy)
-        {
-            toDestroy.push_back(entity);
-        }
-    }
-
-    /* destroy unused entities */
-    for(GameObject *entity : toDestroy)
-    {
-        GameObject::Destroy(entity);
-    }
+    InsertRoutine();
+    
+    /* delete entities */
+    DestroyRoutine();
 }
 
 void Scene::AddEntity(GameObject *entity)
 {
     entity->mScene = this;
-    mPendingEntities.push(entity);
+    mPending.push(entity);
 }
 
 void Scene::RemoveEntity(GameObject *entity)
@@ -96,7 +82,7 @@ void Scene::Unload()
 {
     while(!mEntities.empty())
     {
-        GameObject::Destroy(mEntities.back());
+        delete mEntities.back();
     }
 }
 
@@ -114,7 +100,7 @@ void Scene::Load()
     /* PREFAB Y */
     y->AddComponent<Sprite>(renderer);
     y->AddComponent<RigidBody>(10, 0.0f, false);
-    y->AddComponent<BoxCollider>(32,32);
+    y->AddComponent<BoxCollider>(32,32,true);
     y->AddComponent<MonoBehaviour>();
     
     y->transform.position.x = 256.0f;
@@ -126,4 +112,28 @@ void Scene::Load()
     /* ADD INTO GAME */
     AddEntity(x);
     AddEntity(y);
+}
+
+void Scene::InsertRoutine()
+{
+    while( !mPending.empty() )
+    {
+        GameObject *entity = mPending.front();
+        mPending.pop();
+
+        if(entity != nullptr)
+        {
+            GameObject::Activate(entity);
+            mEntities.push_back(entity);
+        }
+    }
+}
+
+void Scene::DestroyRoutine()
+{
+    while( !mDestroy.empty() )
+    {
+        delete mDestroy.front();
+        mDestroy.pop();
+    }
 }

@@ -72,6 +72,10 @@ add_executable(
     source/engine/system/input/Keyboard.cpp
     source/engine/system/input/Keyboard.h
 
+    # engine.system.sound.audiosystem
+    source/engine/system/sound/AudioSystem.cpp
+    source/engine/system/sound/AudioSystem.h
+
     # engine.utils
     source/engine/utils/Math.cpp
     source/engine/utils/Math.h
@@ -94,4 +98,4 @@ add_executable(
 )
 
 # Link SDL
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} -lSDL2_image)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} -lSDL2_image -lSDL2_mixer)

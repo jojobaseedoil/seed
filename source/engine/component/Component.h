@@ -25,7 +25,6 @@ public:
     const Layer &GetLayer() const; 
     int GetTag() const;
 
-protected:
     GameObject *mGameObject;
 };
 
