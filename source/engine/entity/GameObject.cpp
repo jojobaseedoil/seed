@@ -5,9 +5,8 @@
 
 int GameObject::sNextId = 0;
 
-GameObject::GameObject(const Layer &layer):
+GameObject::GameObject():
     mScene (nullptr),
-    layer  (layer),
     tag    (sNextId++),
     mState (State::Pending)
 {
@@ -18,15 +17,7 @@ GameObject::~GameObject()
 {   
     CollisionSystem *csys = CollisionSystem::GetInstance();
 
-    if(csys != nullptr)
-    {
-        csys->RemoveScripts(tag);
-    }
-
-    if(mScene != nullptr)
-    {
-        mScene->RemoveEntity(this);
-    }
+    csys->RemoveScripts(tag);
 
     for(Component *c : mComponents)
     {

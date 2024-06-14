@@ -5,8 +5,8 @@
 
 #include <SDL2/SDL_log.h>
 
-BoxCollider::BoxCollider(float w, float h, bool isTrigger):
-    Collider (isTrigger),
+BoxCollider::BoxCollider(float w, float h, Layer layer, bool isTrigger):
+    Collider (layer, isTrigger),
     x        (0.0f),
     y        (0.0f),
     w        (w), 

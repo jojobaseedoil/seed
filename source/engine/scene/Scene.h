@@ -2,12 +2,11 @@
 #define SCENE_H
 
 #include <SDL2/SDL_render.h>
-#include <queue>
-#include "../system/CollisionSystem.h"
+
+#include "../utils/SceneManager.h"
 
 class Game;
 class GameObject;
-class InputSystem;
 
 class Scene
 {
@@ -17,21 +16,14 @@ public:
     
     void Update(float deltaTime);
 
-    void AddEntity(GameObject *entity);
-    void RemoveEntity(GameObject *entity);
-
-    template <typename T, typename... Args>
-    T* AddPrefab(Args&&... args);
+    void Insert(GameObject *entity);
+    void Remove(GameObject *entity);
 
     void Start();
 
 protected:
     virtual void Unload();
     virtual void Load();
-
-private:
-    void InsertRoutine();
-    void DestroyRoutine();
 
 public:
     SDL_Renderer *renderer;
@@ -40,11 +32,7 @@ protected:
     /* 'Scene' params */
     Game *mGame;
 
-    CollisionSystem *sCollisionSystem;
-
-    std::vector<GameObject*> mEntities;
-    std::queue<GameObject*> mDestroy;
-    std::queue<GameObject*> mPending;
+    SceneManager mManager;
 };
 
 #endif // SCENE_H

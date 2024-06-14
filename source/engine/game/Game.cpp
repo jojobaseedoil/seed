@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../scene/Scene.h"
 
@@ -17,11 +18,6 @@ Game::Game(int screenWidth, int screenHeight, const std::string &title):
     sInputSystem  (InputSystem::GetInstance())
 {
 
-}
-
-Game::~Game()
-{
-    delete mScene;
 }
 
 /* game basic commands */
@@ -55,7 +51,13 @@ bool Game::Start()
 
     if(IMG_Init(IMG_INIT_PNG) == 0)
     {
-        SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
+        SDL_Log("Unable to initialize SDL_image: %s", IMG_GetError());
+        return false;
+    }
+
+    if(TTF_Init() < 0)
+    {
+        SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
         return false;
     }
 
@@ -76,7 +78,10 @@ void Game::Run()
 
 void Game::Shutdown()
 {    
+    delete mScene;
+
     IMG_Quit();
+    TTF_Quit();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();

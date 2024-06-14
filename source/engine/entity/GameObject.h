@@ -7,7 +7,7 @@
 
 #include "../component/Transform.h"
 #include "../component/MonoBehaviour.h"
-#include "../system/CollisionSystem.h"
+#include "../system/collision/CollisionSystem.h"
 
 class Scene;
 class Component;
@@ -19,10 +19,13 @@ public:
 
     enum class State
     {
-        Active, Paused, Pending, Destroy
+        Active, 
+        Paused, 
+        Pending, 
+        Destroy
     };
 
-    GameObject(const Layer &layer=Layer::Instances);
+    GameObject();
     virtual ~GameObject();
 
     void Update(float deltaTime);
@@ -42,7 +45,6 @@ public:
 public:
 
     Transform transform;
-    const Layer layer;
     const int tag;
 
 protected:

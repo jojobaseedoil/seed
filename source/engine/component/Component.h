@@ -5,13 +5,6 @@
 
 class GameObject;
 
-enum Layer
-{
-    Instances,
-    Background,
-    Wall
-};
-
 class Component
 {
 public:
@@ -20,10 +13,6 @@ public:
     virtual ~Component() = default;
 
     virtual void Update(float deltaTime);
-
-    /* GameObject info */
-    const Layer &GetLayer() const; 
-    int GetTag() const;
 
     GameObject *mGameObject;
 };

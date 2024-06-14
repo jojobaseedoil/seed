@@ -4,6 +4,7 @@
 
 #include "../entity/GameObject.h"
 
+#include "../component/Text.h"
 #include "../component/Sprite.h"
 #include "../component/RigidBody.h"
 #include "../component/BoxCollider.h"
@@ -12,8 +13,7 @@
 
 Scene::Scene(Game *game, SDL_Renderer *renderer):
     mGame            (game),
-    renderer         (renderer),
-    sCollisionSystem (CollisionSystem::GetInstance())
+    renderer         (renderer)
 {
 
 }
@@ -25,48 +25,26 @@ Scene::~Scene()
 
 void Scene::Update(float deltaTime)
 {
-    /* Update entities */
-    for(GameObject *entity : mEntities)
-    {
-        switch ( entity->GetState() )
-        {
-        case GameObject::State::Active:
-            entity->Update(deltaTime);
-            break;
+    /* Scene routine */
+    mManager.ProcessPending();
+    mManager.UpdateEntities(deltaTime);
+    mManager.ProcessDestroy();
+}
 
-        case GameObject::State::Destroy:
-            mDestroy.push(entity);
-            break;
-        
-        default:
-            break;
-        }
+void Scene::Insert(GameObject *entity)
+{
+    if(entity != nullptr)
+    {
+        entity->mScene = this;
+        mManager.Insert(entity);
     }
-
-    /* Check for collisions */
-    sCollisionSystem->BroadPhaseCollisionDetection(mEntities);
-
-    /* insert new entities */
-    InsertRoutine();
-    
-    /* delete entities */
-    DestroyRoutine();
 }
 
-void Scene::AddEntity(GameObject *entity)
+void Scene::Remove(GameObject *entity)
 {
-    entity->mScene = this;
-    mPending.push(entity);
-}
-
-void Scene::RemoveEntity(GameObject *entity)
-{
-    auto itEntities = std::find(mEntities.begin(), mEntities.end(), entity);
-
-    if(itEntities != mEntities.end())
+    if(entity != nullptr)
     {
-        std::iter_swap(itEntities, mEntities.end()-1);
-        mEntities.pop_back();
+        mManager.Remove(entity);
     }
 }
 
@@ -80,60 +58,51 @@ void Scene::Start()
 /* specific load/unload scene */
 void Scene::Unload()
 {
-    while(!mEntities.empty())
-    {
-        delete mEntities.back();
-    }
+    mManager.DestroyEntities();
 }
 
 void Scene::Load()
 {
+    GameObject *w = new GameObject;
     GameObject *x = new GameObject;
     GameObject *y = new GameObject;
+    GameObject *z = new GameObject;
 
+    /* PREFAB W */
+    w->AddComponent<Sprite>(renderer);
+    w->AddComponent<RigidBody>(1.0f, 10.0f, false);
+    w->AddComponent<BoxCollider>(32, 32, Instances);
+    w->AddComponent<DebugBehaviour>();
+    
     /* PREFAB X */
     x->AddComponent<Sprite>(renderer);
-    x->AddComponent<RigidBody>(1.0f, 10.0f, false);
-    x->AddComponent<BoxCollider>(32,32);
-    x->AddComponent<DebugBehaviour>();
+    x->AddComponent<RigidBody>(10, 0.0f, false);
+    x->AddComponent<BoxCollider>(32, 32, Background, true);
+
+    x->transform.position.x = 256.0f;
+    x->transform.position.y = 256.0f;
 
     /* PREFAB Y */
     y->AddComponent<Sprite>(renderer);
     y->AddComponent<RigidBody>(10, 0.0f, false);
-    y->AddComponent<BoxCollider>(32,32,true);
-    y->AddComponent<MonoBehaviour>();
-    
-    y->transform.position.x = 256.0f;
-    y->transform.position.y = 256.0f;
+    y->AddComponent<BoxCollider>(32, 32, Instances, false);
 
-    /* ADD INTO COLLISION SYSTEM */
-    sCollisionSystem->InsertLayer(Instances, {Instances});
+    y->transform.position.x = 512.0f;
+    y->transform.position.y = 200.0f;
+
+    /* PREFAB Z */
+    TextAttributes attr = {"the quick brown fox jumps over the lazy dog"};
+    z->AddComponent<Text>(renderer, attr);
+
+    CollisionSystem *csys = CollisionSystem::GetInstance();
+
+    csys->SetCollisionAdj({
+        {Instances, {Instances}}
+    });
 
     /* ADD INTO GAME */
-    AddEntity(x);
-    AddEntity(y);
-}
-
-void Scene::InsertRoutine()
-{
-    while( !mPending.empty() )
-    {
-        GameObject *entity = mPending.front();
-        mPending.pop();
-
-        if(entity != nullptr)
-        {
-            GameObject::Activate(entity);
-            mEntities.push_back(entity);
-        }
-    }
-}
-
-void Scene::DestroyRoutine()
-{
-    while( !mDestroy.empty() )
-    {
-        delete mDestroy.front();
-        mDestroy.pop();
-    }
+    Insert(z);
+    Insert(w);
+    Insert(x);
+    Insert(y);
 }

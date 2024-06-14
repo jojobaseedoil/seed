@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL_log.h>
 
+#include "../system/collision/CollisionSystem.h"
 #include "../system/sound/AudioSystem.h"
 #include "../system/input/Keyboard.h"
 #include "../entity/GameObject.h"
@@ -16,15 +17,20 @@ public:
 
     void OnStart() override
     {
-        mAudio = new AudioSystem;
+        sCollisionSystem = CollisionSystem::GetInstance();
+        
         mRigidbody = mGameObject->GetComponent<RigidBody>();
+        mCollider  = mGameObject->GetComponent<Collider>();
+        
         mKeyboard.Bind(SDL_SCANCODE_SPACE, [this](){ DestroySelf(); });
     }
 
     void Update(float deltaTime) override
     {
-        mAudio->Update(deltaTime);
+        mAudio.Update(deltaTime);
         Move();
+
+        sCollisionSystem->BroadPhaseCollisionDetection(mCollider);
     }
 
     void DestroySelf()
@@ -68,20 +74,20 @@ public:
 
     void OnTriggerEnter(Collider &other) override
     {
-        SDL_Log("Enter");
-        mAudio->PlaySound("enter.wav");
+        mAudio.PlaySound("enter.wav");
     }
 
     void OnTriggerExit(Collider &other) override
     {
-        SDL_Log("Exit");
-        mAudio->PlaySound("exit.wav");
+        mAudio.PlaySound("exit.wav");
     }
 
 private:
     RigidBody *mRigidbody;
+    Collider *mCollider;
     Keyboard mKeyboard;
-    AudioSystem *mAudio;
+    AudioSystem mAudio;
+    CollisionSystem *sCollisionSystem;
 };
 
 #endif // DEBUG_BEHAVIOUR_H

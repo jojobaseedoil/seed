@@ -11,7 +11,6 @@ class Game
 {
 public:
     Game(int screenWidth, int screenHeight, const std::string &title="");
-    ~Game();
 
     /* game basic commands */
     bool Start();

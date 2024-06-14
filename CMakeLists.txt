@@ -7,95 +7,71 @@ project(seed)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Including SDL
-find_package(SDL2 REQUIRED)
+# Defining main directories
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
+set(ENGINE_COMPONENT_DIR ${SOURCE_DIR}/engine/component)
+set(ENGINE_GAME_DIR ${SOURCE_DIR}/engine/game)
+set(ENGINE_SCENE_DIR ${SOURCE_DIR}/engine/scene)
+set(ENGINE_ENTITY_DIR ${SOURCE_DIR}/engine/entity)
+set(ENGINE_SYSTEM_DIR ${SOURCE_DIR}/engine/system)
+set(ENGINE_UTILS_DIR ${SOURCE_DIR}/engine/utils)
+
+# find packages with pkg-config
+include(FindPkgConfig)
+
+# Find the necessary packages
+pkg_search_module(SDL2 REQUIRED sdl2)
+pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
+
+# Print out the package information for debugging
+message(STATUS "SDL2 include dirs: ${SDL2_INCLUDE_DIRS}")
+message(STATUS "SDL2 libraries: ${SDL2_LIBRARIES}")
+
+message(STATUS "SDL2_image include dirs: ${SDL2IMAGE_INCLUDE_DIRS}")
+message(STATUS "SDL2_image libraries: ${SDL2IMAGE_LIBRARIES}")
+
+message(STATUS "SDL2_ttf include dirs: ${SDL2TTF_INCLUDE_DIRS}")
+message(STATUS "SDL2_ttf libraries: ${SDL2TTF_LIBRARIES}")
+
+message(STATUS "SDL2_mixer include dirs: ${SDL2MIXER_INCLUDE_DIRS}")
+message(STATUS "SDL2_mixer libraries: ${SDL2MIXER_LIBRARIES}")
+
+# Including dirs
 include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(${SDL2IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2TTF_INCLUDE_DIRS})
+include_directories(${SDL2MIXER_INCLUDE_DIRS})
 
 # Add an executable
 add_executable(
     ${PROJECT_NAME} 
-    
-    # main entry
-    source/main.cpp
-    
-    # engine.game
-    source/engine/game/Game.cpp
-    source/engine/game/Game.h
-
-    # engine.scene
-    source/engine/scene/Scene.cpp
-    source/engine/scene/Scene.h
-    
-    # engine.entity
-    source/engine/entity/GameObject.cpp
-    source/engine/entity/GameObject.h
-    
-    # engine.component
-    source/engine/component/Component.cpp
-    source/engine/component/Component.h
-
-    # engine.component.collider
-    source/engine/component/Collider.cpp
-    source/engine/component/Collider.h
-
-    source/engine/component/BoxCollider.cpp
-    source/engine/component/BoxCollider.h
-    
-    # engine.component.drawable
-    source/engine/component/Render.cpp
-    source/engine/component/Render.h
-
-    source/engine/component/Sprite.cpp
-    source/engine/component/Sprite.h
-
-    # engine.component.rigidbody
-    source/engine/component/RigidBody.cpp
-    source/engine/component/RigidBody.h
-
-    # engine.component.monobehaviour
-    source/engine/component/MonoBehaviour.cpp
-    source/engine/component/MonoBehaviour.h
-
-    # engine.system.collisionsystem
-    source/engine/system/CollisionSystem.cpp
-    source/engine/system/CollisionSystem.h
-
-    # engine.system.input.inputsystem
-    source/engine/system/input/InputSystem.cpp
-    source/engine/system/input/InputSystem.h
-
-    # engine.system.input.inputdevice
-    source/engine/system/input/InputDevice.cpp
-    source/engine/system/input/InputDevice.h
-
-    # engine.system.input.keyboard
-    source/engine/system/input/Keyboard.cpp
-    source/engine/system/input/Keyboard.h
-
-    # engine.system.sound.audiosystem
-    source/engine/system/sound/AudioSystem.cpp
-    source/engine/system/sound/AudioSystem.h
-
-    # engine.utils
-    source/engine/utils/Math.cpp
-    source/engine/utils/Math.h
-
-    # engine.utils.idmanager
-    # source/engine/utils/IDManager.cpp
-    # source/engine/utils/IDManager.h
-
-    # engine.utils.eventmanager
-    # source/engine/utils/EventManager.cpp
-    # source/engine/utils/EventManager.h
-
-    # engine.utils.builder
-    # source/engine/utils/builder/Builder.h
-    # source/engine/utils/builder/Director.h
-
-    # engine.utils.observer
-    # source/engine/utils/observer/Observer.cpp
-    # source/engine/utils/observer/Observer.h
+    ${SOURCE_DIR}/main.cpp
+    ${ENGINE_GAME_DIR}/Game.cpp
+    ${ENGINE_SCENE_DIR}/Scene.cpp
+    ${ENGINE_ENTITY_DIR}/GameObject.cpp
+    ${ENGINE_COMPONENT_DIR}/Component.cpp
+    ${ENGINE_COMPONENT_DIR}/Collider.cpp
+    ${ENGINE_COMPONENT_DIR}/BoxCollider.cpp
+    ${ENGINE_COMPONENT_DIR}/Render.cpp
+    ${ENGINE_COMPONENT_DIR}/Sprite.cpp
+    ${ENGINE_COMPONENT_DIR}/RigidBody.cpp
+    ${ENGINE_COMPONENT_DIR}/MonoBehaviour.cpp
+    ${ENGINE_COMPONENT_DIR}/Text.cpp
+    ${ENGINE_SYSTEM_DIR}/collision/CollisionSystem.cpp
+    ${ENGINE_SYSTEM_DIR}/input/InputSystem.cpp
+    ${ENGINE_SYSTEM_DIR}/input/InputDevice.cpp
+    ${ENGINE_SYSTEM_DIR}/input/Keyboard.cpp
+    ${ENGINE_SYSTEM_DIR}/sound/AudioSystem.cpp
+    ${ENGINE_UTILS_DIR}/Math.cpp
+    ${ENGINE_UTILS_DIR}/SceneManager.cpp
 )
 
 # Link SDL
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} -lSDL2_image -lSDL2_mixer)
+target_link_libraries(${PROJECT_NAME} 
+    ${SDL2_LIBRARIES} 
+    ${SDL2IMAGE_LIBRARIES} 
+    ${SDL2TTF_LIBRARIES} 
+    ${SDL2MIXER_LIBRARIES}
+)
