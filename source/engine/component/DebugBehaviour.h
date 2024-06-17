@@ -17,12 +17,13 @@ public:
 
     void OnStart() override
     {
-        sCollisionSystem = CollisionSystem::GetInstance();
+        sCsys = CollisionSystem::GetInstance();
         
         mRigidbody = mGameObject->GetComponent<RigidBody>();
         mCollider  = mGameObject->GetComponent<Collider>();
         
-        mKeyboard.Bind(SDL_SCANCODE_SPACE, [this](){ DestroySelf(); });
+        mKeyboard.Bind(SDL_SCANCODE_SPACE, [this](){ ChangeState(); });
+        mKeyboard.Bind(SDL_SCANCODE_R    , [this](){ Destroy();     });
     }
 
     void Update(float deltaTime) override
@@ -30,12 +31,26 @@ public:
         mAudio.Update(deltaTime);
         Move();
 
-        sCollisionSystem->BroadPhaseCollisionDetection(mCollider);
+        sCsys->BroadPhaseCollisionDetection(mCollider);
     }
 
-    void DestroySelf()
+    void Destroy()
     {
         GameObject::Destroy(mGameObject);
+    }
+
+    void ChangeState()
+    {
+        GameObject::State s = mGameObject->GetState();
+
+        if(s == GameObject::State::Paused)
+        {
+            GameObject::Activate(mGameObject);
+        }
+        else if(s == GameObject::State::Active) 
+        {
+            GameObject::Pause(mGameObject);
+        }
     }
 
     void Move()
@@ -83,11 +98,11 @@ public:
     }
 
 private:
-    RigidBody *mRigidbody;
-    Collider *mCollider;
-    Keyboard mKeyboard;
-    AudioSystem mAudio;
-    CollisionSystem *sCollisionSystem;
+    CollisionSystem *sCsys;
+    AudioSystem      mAudio;
+    RigidBody       *mRigidbody;
+    Collider        *mCollider;
+    Keyboard         mKeyboard;
 };
 
 #endif // DEBUG_BEHAVIOUR_H

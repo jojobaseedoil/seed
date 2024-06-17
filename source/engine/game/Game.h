@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "../system/input/InputSystem.h"
+#include "../utils/SceneManager.h"
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -36,10 +37,8 @@ protected:
 
 protected:
     /* 'Game' params */
-    SDL_Window *mWindow;
+    SDL_Window   *mWindow;
     SDL_Renderer *mRenderer;
-
-    Scene *mScene;
 
     std::string mTitle;
     int mWidth;
@@ -50,7 +49,8 @@ protected:
     bool mIsRunning;
     bool mIsPaused;
 
-    InputSystem *sInputSystem;
+    SceneManager *sScene;
+    InputSystem  *sInputSystem;
 };
 
 #endif // GAME_H

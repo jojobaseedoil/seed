@@ -5,19 +5,27 @@
 
 int GameObject::sNextId = 0;
 
-GameObject::GameObject():
-    mScene (nullptr),
+GameObject::GameObject(Scene *scene):
+    mScene (scene),
     tag    (sNextId++),
-    mState (State::Pending)
+    mState (State::Active)
 {
+    /* insert this entity into current scene */
+    SceneManager *manager = SceneManager::GetInstance();
+    manager->InsertEntity(this);
+
     transform = *AddComponent<Transform>();
 }
 
 GameObject::~GameObject()
 {   
+    /* remove this entity from collision system */  
     CollisionSystem *csys = CollisionSystem::GetInstance();
-
     csys->RemoveScripts(tag);
+
+    /* remove this entity from current scene */
+    SceneManager *manager = SceneManager::GetInstance();
+    manager->RemoveEntity(this);
 
     for(Component *c : mComponents)
     {

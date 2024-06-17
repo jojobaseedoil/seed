@@ -1,31 +1,33 @@
 #ifndef SCENE_MANAGER_H
 #define SCENE_MANAGER_H
 
-#include <queue>
-#include <unordered_map>
-
+class Scene;
+class Render;
 class GameObject;
 
 class SceneManager
 {
 public:
+    ~SceneManager();
 
-    void ProcessPending();
-    void UpdateEntities(float deltaTime);
-    void ProcessDestroy();
+    static SceneManager *GetInstance();
 
-    void Insert(GameObject *entity);
-    void Remove(GameObject *entity);
+    static void ChangeScene(Scene *newScene);
+    
+    void Update(float deltaTime);
+    void Draw();
 
-    void DestroyEntities();
+    /* Add/Remove entity into current scene */
+    void InsertRender(Render *render);
+    void RemoveEntity(GameObject *entity);
+    /* Add/Remove entity from current scene */
+    void InsertEntity(GameObject *entity);
+    void RemoveRender(Render *component);
 
-    std::vector<GameObject*> Entities() const;
 private:
+    SceneManager();
 
-    std::queue<GameObject*> mPending;
-    std::queue<GameObject*> mDestroy;
-
-    std::unordered_map<int, GameObject*> mEntities;
+    static SceneManager *instance;
+    Scene *mCurrScene;
 };
-
 #endif // SCENE_MANAGER_H

@@ -20,12 +20,11 @@ public:
     enum class State
     {
         Active, 
-        Paused, 
-        Pending, 
+        Paused,
         Destroy
     };
 
-    GameObject();
+    GameObject(Scene *scene);
     virtual ~GameObject();
 
     void Update(float deltaTime);

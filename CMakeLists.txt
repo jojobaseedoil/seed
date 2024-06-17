@@ -66,6 +66,8 @@ add_executable(
     ${ENGINE_SYSTEM_DIR}/sound/AudioSystem.cpp
     ${ENGINE_UTILS_DIR}/Math.cpp
     ${ENGINE_UTILS_DIR}/SceneManager.cpp
+
+    source/engine/prefab/PrefabText.cpp
 )
 
 # Link SDL

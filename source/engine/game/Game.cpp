@@ -5,17 +5,19 @@
 
 #include "../scene/Scene.h"
 
+#include "../system/collision/CollisionSystem.h"
+
 Game::Game(int screenWidth, int screenHeight, const std::string &title):
     mWindow       (nullptr),
     mRenderer     (nullptr),
-    mScene        (nullptr),
     mTitle        (title),
     mWidth        (screenWidth),
     mHeight       (screenHeight),
     mTicksCounter (0.0f),
     mIsRunning    (true),
     mIsPaused     (false),
-    sInputSystem  (InputSystem::GetInstance())
+    sInputSystem  (InputSystem::GetInstance()),
+    sScene        (SceneManager::GetInstance())
 {
 
 }
@@ -77,8 +79,13 @@ void Game::Run()
 }
 
 void Game::Shutdown()
-{    
-    delete mScene;
+{   
+    delete sScene;
+    delete sInputSystem;
+
+    CollisionSystem *csys = CollisionSystem::GetInstance();
+
+    delete csys;
 
     IMG_Quit();
     TTF_Quit();
@@ -86,6 +93,7 @@ void Game::Shutdown()
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
+
 
 void Game::Quit()
 {
@@ -147,22 +155,21 @@ void Game::UpdateGame()
 
     // SDL_Log("Delta Time : %f", deltaTime);
 
-    if(mScene != nullptr)
-    {
-        mScene->Update(deltaTime);
-    }
+    sScene->Update(deltaTime);
 }
 
 void Game::GenerateOutput()
 {
-    SDL_RenderPresent(mRenderer);
     SDL_RenderClear(mRenderer);
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
+
+    sScene->Draw();
+
+    SDL_RenderPresent(mRenderer);
 }
 
 /* specific for every game */
 void Game::StartScene()
 {
-    mScene = new Scene(this, mRenderer);
-    mScene->Start();
+    sScene->ChangeScene( new Scene(this, mRenderer) );
 }

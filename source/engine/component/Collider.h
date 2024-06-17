@@ -7,7 +7,9 @@ enum Layer
 {
     Instances,
     Background,
-    Wall
+    Wall,
+    Player,
+    Box
 };
 
 class Collider : public Component

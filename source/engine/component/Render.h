@@ -9,9 +9,9 @@ class Render : public Component
 {
 public:
     Render(SDL_Renderer *renderer);
+    virtual ~Render();
 
     virtual void Draw();
-    virtual void Update(float deltaTime) override;
 
 protected:
     SDL_Renderer *mRenderer;

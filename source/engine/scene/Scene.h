@@ -2,24 +2,26 @@
 #define SCENE_H
 
 #include <SDL2/SDL_render.h>
+#include <vector>
 
 #include "../utils/SceneManager.h"
 
 class Game;
+class Render;
 class GameObject;
 
 class Scene
 {
+friend class SceneManager; 
+
 public:
     Scene(Game *game, SDL_Renderer *renderer);
     virtual ~Scene();
     
-    void Update(float deltaTime);
-
-    void Insert(GameObject *entity);
-    void Remove(GameObject *entity);
-
     void Start();
+
+    void Update(float deltaTime);
+    void Draw();
 
 protected:
     virtual void Unload();
@@ -32,7 +34,8 @@ protected:
     /* 'Scene' params */
     Game *mGame;
 
-    SceneManager mManager;
+    std::vector<GameObject*> mEntities;
+    std::vector<Render*>     mDrawables;
 };
 
 #endif // SCENE_H
